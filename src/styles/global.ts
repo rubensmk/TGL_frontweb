@@ -9,22 +9,41 @@ export default createGlobalStyle`
     }
 
     body {
-        background: #ffff;
+        background: #F7F7F7;
         -webkit-font-smoothing: antialiased;
     }
 
     body, input, button{
-        font: 16px Roboto, sans-serif ;
+        font: 16px Helvetica, sans-serif;
+        font-weight: bold;
+        font-style: italic;
 
-    }
-
-    #root {
-        max-width: 960px;
-        margin: 0 auto ;
-        padding: 40px 20px;
     }
 
     button {
         cursor: pointer;
+    }
+
+    @media (max-width: 1080px){
+    html{
+        font-size: 93.75%;
+        }
+    }
+
+    @media (max-width: 720px){
+    html{
+        font-size: 87.5%;
+        }
+    }
+
+    #root {
+      --gray: #707070;
+      --light-gray:#9D9D9D;
+      --border-gray:#DDDDDD;
+      --light-green:#B5C401;
+      --green:#01AC66;
+      --purple:##7F3992;
+      --orange:#F79C31;
+      --white:#FFFFFF;
     }
 `;
