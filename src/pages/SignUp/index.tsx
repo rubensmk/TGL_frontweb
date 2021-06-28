@@ -23,12 +23,12 @@ const SignUp: React.FC = () => {
           <input type="text" placeholder="Name" />
           <input type="text" placeholder="Email" />
           <input type="text" placeholder="Password" />
-          <Link to="/" className="register">
+          <Link to="/" className="register button">
             Register
             <FiArrowRight />
           </Link>
         </section>
-        <Link to="/" className="goBack">
+        <Link to="/" className="goBack button">
           <FiArrowLeft />
           Back
         </Link>

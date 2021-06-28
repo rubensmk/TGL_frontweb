@@ -115,8 +115,13 @@ export const Auth = styled.div`
     }
   }
 
-  button:hover{
-    opacity: 0.7;
+  .button{
+    opacity: 1;
+    transition: opacity 0.2s;
+
+    &:hover{
+      opacity:0.7;
+    }
   }
 
 `;

@@ -17,8 +17,8 @@ export default createGlobalStyle`
         font: 16px Helvetica, sans-serif;
         font-weight: bold;
         font-style: italic;
-
     }
+
 
     button {
         cursor: pointer;
@@ -42,7 +42,7 @@ export default createGlobalStyle`
       --border-gray:#DDDDDD;
       --light-green:#B5C401;
       --green:#01AC66;
-      --purple:##7F3992;
+      --purple:#7F3992;
       --orange:#F79C31;
       --white:#FFFFFF;
     }

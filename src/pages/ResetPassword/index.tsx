@@ -21,12 +21,12 @@ const ResetPassword: React.FC = () => {
         <h2>Reset Password</h2>
         <section>
           <input type="text" placeholder="Email" />
-          <Link to="/" className="sendLink">
+          <Link to="/" className="sendLink button">
             Send Link
             <FiArrowRight />
           </Link>
         </section>
-        <Link to="/" className="goBack">
+        <Link to="/" className="goBack button">
           <FiArrowLeft />
           Back
         </Link>

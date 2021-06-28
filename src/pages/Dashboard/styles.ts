@@ -50,7 +50,72 @@ export const Header = styled.header`
 
     }
 
+    .button{
+    opacity: 1;
+    transition: opacity 0.2s;
+
+    &:hover{
+      opacity:0.7;
+    }
+  }
+
   }
 `;
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 72px  196px  205px 130px;
+`;
+
+export const Options = styled.section`
+  display: flex;
+  align-items: center;
+
+  h2{
+    font-size:24px;
+    color: var(--gray);
+  }
+
+  .new-bet{
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    width: 190px;
+    height: 28px;
+    border: 0;
+    background: transparent;
+    color: var(--light-green);
+    font-size: 35px;
+    transition: opacity 0.2s;
+
+    &:hover{
+      opacity:0.7;
+    }
+    svg{
+      margin-left: 11px;
+    }
+  }
+`;
+
+export const Filters = styled.div`
+  display: flex;
+  align-items: center;
+  width: 445px;
+  margin-left: 60px;
+  margin-right:283px;
+
+  p{
+    text-decoration: none;
+    color: #868686;
+    font-size: 17px;
+    font-weight: 100;
+    margin-right: 15px;
+  }
+`;
+
+export const RecentGames = styled.div``;
+
+
+
 
 

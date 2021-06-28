@@ -22,15 +22,15 @@ const SignIn: React.FC = () => {
         <section>
           <input type="text" placeholder="Email" />
           <input type="text" placeholder="Password" />
-          <Link className="forgot" to="/password">
+          <Link className="forgot button" to="/password">
             I forget my password
           </Link>
-          <Link to="/dashboard" className="login">
+          <Link to="/dashboard" className="login button">
             Log In
             <FiArrowRight />
           </Link>
         </section>
-        <Link to="/register" className="signup">
+        <Link to="/register" className="signup button">
           Sign Up
           <FiArrowRight />
         </Link>
