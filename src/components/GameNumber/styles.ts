@@ -1,7 +1,12 @@
-import styled from 'styled-components';
+/* eslint-disable prettier/prettier */
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
-  input {
+interface ContainerProps {
+  isActive?: boolean;
+}
+
+export const Container = styled.button<ContainerProps>`
+
     cursor: pointer;
     border: 0;
     color: white;
@@ -12,5 +17,11 @@ export const Container = styled.div`
     width: 4rem;
     height: 4rem;
     margin: 0.6rem 0.6rem;
-  }
+
+    ${props =>
+    props.isActive &&
+    css`
+        background: var(--green);
+      `}
+
 `;

@@ -5,15 +5,17 @@ import * as S from './styles';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   color: string;
+  active?: boolean;
 };
 
 const SelectGameButton: React.FC<ButtonProps> = ({
   children,
   color,
+  active,
   ...rest
 }) => {
   return (
-    <S.Container color={color} type="button" {...rest}>
+    <S.Container isActive={active} color={color} type="button" {...rest}>
       {children}
     </S.Container>
   );

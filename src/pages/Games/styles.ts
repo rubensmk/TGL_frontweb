@@ -98,8 +98,12 @@ export const Description = styled.span`
   font-weight: 200;
 `;
 
-export const Numbers = styled.form`
+export const Numbers = styled.div`
   display: flex;
+  align-items: center;
+  width: 900px;
+  flex-wrap: wrap;
+  margin-top: 27px;
 `;
 
 export const GameOptions = styled.div`
@@ -146,9 +150,8 @@ export const GameOptions = styled.div`
 export const Cart = styled.aside`
   border: 1px solid var(--border-gray);
   border-radius: 0.6rem;
-  background: var(--white);
   width: 24rem;
-  max-height: 900px;
+  height: 700px;
 
   h1 {
     color: var(--light-gray);
@@ -161,6 +164,7 @@ export const Cart = styled.aside`
 
 export const CartList = styled.div`
   width: 100%;
+  height: 400px;
 `;
 
 export const CartTotal = styled.div`

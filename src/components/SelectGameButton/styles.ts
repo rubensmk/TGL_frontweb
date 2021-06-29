@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 interface ContainerProps {
   color: string;
+  isActive?: boolean;
 }
 
 export const Container = styled.button<ContainerProps>`
@@ -28,4 +29,11 @@ export const Container = styled.button<ContainerProps>`
   &:hover {
     opacity: 0.7;
   }
+
+  ${props =>
+    props.isActive &&
+    css`
+      background-color: ${props.color};
+      color: var(--white);
+    `}
 `;

@@ -7,20 +7,24 @@ import * as S from './styles';
 interface CompletedGameCardProps {
   color: string;
   type: string;
+  selectedNumbers: string;
+  price: string;
 }
 
 const CompletedGameCard: React.FC<CompletedGameCardProps> = ({
   color,
   type,
+  selectedNumbers,
+  price,
 }) => {
   return (
     <S.Wrapper>
       <FiTrash2 />
       <S.Container color={color}>
-        <strong>01, 02,04,05,06,07,09,15,17,20,21,22,23,24,25</strong>
+        <strong>{selectedNumbers}</strong>
         <div>
           <h3>{type}</h3>
-          <p>R$ 2,50</p>
+          <p>{price}</p>
         </div>
       </S.Container>
     </S.Wrapper>

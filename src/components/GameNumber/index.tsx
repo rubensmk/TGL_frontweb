@@ -1,12 +1,17 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import * as S from './styles';
 
-const GameNumber: React.FC = () => {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  value: number;
+  isActive?: boolean;
+}
+
+const GameNumber: React.FC<ButtonProps> = ({ value, isActive, ...rest }) => {
   return (
-    <S.Container>
-      <input value="1" type="button" />
+    <S.Container {...rest} isActive={isActive}>
+      {value + 1}
     </S.Container>
   );
 };

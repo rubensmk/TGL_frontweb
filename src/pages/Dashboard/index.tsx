@@ -1,11 +1,16 @@
 import React from 'react';
 import { FiArrowRight } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CompletedGameCard from '../../components/CompletedGameCard';
 import SelectGameButton from '../../components/SelectGameButton';
+import { IState } from '../../store';
+import { ICartItem } from '../../store/modules/cart/types';
 import * as S from './styles';
 
 const SignIn: React.FC = () => {
+  const reduxCart = useSelector<IState, ICartItem[]>(state => state.cart.items);
+
   return (
     <S.Container>
       <S.Header>
@@ -36,9 +41,14 @@ const SignIn: React.FC = () => {
         </S.Options>
 
         <S.RecentGames>
-          <CompletedGameCard color="#7F3992" type="Lotofácil" />
-          <CompletedGameCard color="#01AC66" type="Mega-sena" />
-          <CompletedGameCard color="#F79C31" type="Quina" />
+          {reduxCart.map(item => (
+            <CompletedGameCard
+              listNumbers={item.choosenNumbers}
+              color={item.gameColor}
+              type={item.gameType}
+              price={item.gamePrice}
+            />
+          ))}
         </S.RecentGames>
       </S.Content>
     </S.Container>
