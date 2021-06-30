@@ -10,13 +10,21 @@ export const Wrapper = styled.div`
   flex-direction:row;
   align-items: center;
   margin-bottom: 28px;
-  svg{
+
+  button{
+
+    border:0;
+    background: transparent;
+
+    svg{
     width: 20px;
     height: 24px;
     margin-right:14px;
     margin-left:12px;
     color:var(--gray);
   }
+  }
+
 `;
 
 export const Container = styled.div<ContainerProps>`

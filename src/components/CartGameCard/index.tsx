@@ -5,10 +5,12 @@ import { FiTrash2 } from 'react-icons/fi';
 import * as S from './styles';
 
 interface CompletedGameCardProps {
+  itemId: string;
   color: string;
   type: string;
   selectedNumbers: string;
-  price: string;
+  price: number;
+  handleDeleteFromCart: (id: string) => void;
 }
 
 const CompletedGameCard: React.FC<CompletedGameCardProps> = ({
@@ -16,15 +18,24 @@ const CompletedGameCard: React.FC<CompletedGameCardProps> = ({
   type,
   selectedNumbers,
   price,
+  itemId,
+  handleDeleteFromCart,
 }) => {
   return (
     <S.Wrapper>
-      <FiTrash2 />
+      <button type="button" onClick={() => handleDeleteFromCart(itemId)}>
+        <FiTrash2 />
+      </button>
       <S.Container color={color}>
         <strong>{selectedNumbers}</strong>
         <div>
           <h3>{type}</h3>
-          <p>{price}</p>
+          <p>
+            {price.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}
+          </p>
         </div>
       </S.Container>
     </S.Wrapper>

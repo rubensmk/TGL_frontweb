@@ -44,7 +44,7 @@ export const Auth = styled.div`
     color: var(--gray);
   }
 
-  section {
+  form {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 /* eslint-disable array-callback-return */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-plusplus */
@@ -7,12 +8,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications'
 import CartGameCard from '../../components/CartGameCard';
 import GameNumber from '../../components/GameNumber';
 import SelectGameButton from '../../components/SelectGameButton';
 import { addItemsToReduxCart } from '../../store/modules/cart/actions';
 import * as S from './styles';
 import { ICartItem } from '../../store/modules/cart/types';
+import { formatValue } from '../../utils/formatValue';
 
 interface GameProps {
   type: string;
@@ -28,12 +31,6 @@ interface NumberProps {
   value: number;
 }
 
-interface CartProps {
-  choosenNumbers: string;
-  gameType: string;
-  gamePrice: string;
-  gameColor: string;
-}
 
 const Games: React.FC<NumberProps> = () => {
   const [games, setGames] = useState<GameProps[]>([]);
@@ -43,17 +40,21 @@ const Games: React.FC<NumberProps> = () => {
   const [color, setColor] = useState('');
   const [limit, setLimit] = useState(0);
   const [range, setRange] = useState(0);
+  const [minCartValue, setMinCartValue] = useState(0);
   const [betNumbers, setBetNumbers] = useState<number[]>([]);
   const [selectedGame, setSelectedGame] = useState('');
   const [choosedNumbers, setChoosedNumbers] = useState<number[]>([]);
-  const [cartList, setCartList] = useState<CartProps[]>([]);
+  const [cartList, setCartList] = useState<ICartItem[]>([]);
+  const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
   const history = useHistory();
+  const { addToast } = useToasts();
 
 
   const handleSelectGame = (game: GameProps) => {
     setChoosedNumbers([]);
     setSelectedGame(game.type);
+    setMinCartValue(game.minCartValue);
     setColor(game.color);
     setPrice(game.price);
     setLimit(game.maxNumber);
@@ -133,25 +134,41 @@ const Games: React.FC<NumberProps> = () => {
 
   const handleAddToCart = () => {
     const numbers = [...choosedNumbers];
-    const newCartList = {
+    let newTotal = total;
+    const newCartItem = {
+      id: new Date().toISOString(),
       choosenNumbers: numbers.sort((a, b) => a - b).toString(),
       gameType: selectedGame,
-      gamePrice: price.toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-      }),
+      gamePrice: price,
       gameColor: color,
     };
-    setCartList([...cartList, newCartList]);
+    newTotal += newCartItem.gamePrice;
+    setTotal(newTotal);
+    setCartList([...cartList, newCartItem]);
+
   };
 
+  const handleRemoveFromCart = async (id: string) => {
+    const cartItems = [...cartList];
+    const cartItemsFiltered = cartItems.filter((item) => item.id !== id);
+
+    setCartList(cartItemsFiltered);
+
+  }
+
   const handleSave = useCallback((allCartItems: ICartItem[]) => {
-    allCartItems.map(item => {
-      dispatch(addItemsToReduxCart(item))
-    });
-    history.push('/dashboard');
+    if (total >= minCartValue) {
+      allCartItems.map(item => {
+        dispatch(addItemsToReduxCart(item))
+      });
+      history.push('/dashboard');
+      addToast('Suas apostas foram salvas com sucesso!, Boa sorte.', { appearance: 'success', autoDismiss: true })
+    } else {
+      addToast(`Você precisa completar o valor mínimo de ${formatValue(minCartValue)} para salvar.`, { appearance: 'warning', autoDismiss: true })
+    }
+
   },
-    [dispatch, history],
+    [dispatch, history, total, minCartValue, addToast],
   );
 
   useEffect(() => {
@@ -243,6 +260,9 @@ const Games: React.FC<NumberProps> = () => {
               cartList.map(item => {
                 return (
                   <CartGameCard
+                    key={item.id}
+                    itemId={item.id}
+                    handleDeleteFromCart={handleRemoveFromCart}
                     selectedNumbers={item.choosenNumbers}
                     price={item.gamePrice}
                     color={item.gameColor}
@@ -256,7 +276,8 @@ const Games: React.FC<NumberProps> = () => {
               <h1>
                 CART <span>TOTAL:</span>
               </h1>
-              <p>R$7,00</p>
+              <p>{formatValue(total)}
+              </p>
             </div>
             <button
               type="button"
