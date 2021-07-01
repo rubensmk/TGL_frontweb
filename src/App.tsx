@@ -6,15 +6,16 @@ import Routes from './routes';
 import GlobalStyle from './styles/global';
 import store from './store';
 
-const App: React.FC = () => (
-  <Provider store={store}>
-    <ToastProvider>
-      <BrowserRouter>
-        <Routes />
-      </BrowserRouter>
-      <GlobalStyle />
-    </ToastProvider>
-  </Provider>
-);
-
+const App: React.FC = () => {
+  return (
+    <Provider store={store}>
+      <ToastProvider>
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
+        <GlobalStyle />
+      </ToastProvider>
+    </Provider>
+  );
+};
 export default App;

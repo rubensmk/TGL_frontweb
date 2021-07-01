@@ -54,21 +54,25 @@ export const Header = styled.header`
     opacity: 1;
     transition: opacity 0.2s;
 
-    &:hover{
-      opacity:0.7;
+      &:hover{
+        opacity:0.7;
+      }
     }
-  }
-
   }
 `;
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
   margin: 72px  196px  205px 130px;
+
+  @media(max-width:1432px){
+    margin: 56px  160px  180px 90px;
+    }
 `;
 
 export const Options = styled.section`
   display: flex;
+  justify-content:center;
   align-items: center;
 
   h2{
@@ -95,6 +99,7 @@ export const Options = styled.section`
       margin-left: 11px;
     }
   }
+
 `;
 
 export const Filters = styled.div`
@@ -113,7 +118,18 @@ export const Filters = styled.div`
   }
 `;
 
-export const RecentGames = styled.div``;
+export const RecentGames = styled.div`
+  display: flex;
+  flex-direction: column;
+  span {
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 200;
+      color: var(--light-gray);
+      display: flex;
+      margin-top: 30px;
+    }
+`;
 
 
 

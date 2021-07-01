@@ -14,16 +14,18 @@ const SignUp: React.FC = () => {
   const history = useHistory();
   const { addToast } = useToasts();
 
-  const handleRegisterName = (event: any) => {
+  const handleRegisterName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRegisterName(event.target.value);
   };
-  const handleRegisterEmail = (event: any) => {
+  const handleRegisterEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRegisterEmail(event.target.value);
   };
-  const handleRegisterPassword = (event: any) => {
+  const handleRegisterPassword = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setRegisterPassword(event.target.value);
   };
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     const newUser = {

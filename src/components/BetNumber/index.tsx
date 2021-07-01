@@ -8,12 +8,14 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isActive?: boolean;
 }
 
-const GameNumber: React.FC<ButtonProps> = ({ value, isActive, ...rest }) => {
+export const BetNumber: React.FC<ButtonProps> = ({
+  value,
+  isActive,
+  ...rest
+}) => {
   return (
     <S.Container {...rest} isActive={isActive}>
       {value + 1}
     </S.Container>
   );
 };
-
-export default GameNumber;

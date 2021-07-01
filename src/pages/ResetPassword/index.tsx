@@ -13,10 +13,10 @@ const ResetPassword: React.FC = () => {
   const allUsers = useSelector<IState, IUser[]>(state => state.auth.users);
   const { addToast } = useToasts();
 
-  const handleResetPassword = (event: any) => {
+  const handleResetPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForgotPassword(event.target.value);
   };
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     allUsers.map(user => {
       if (forgotPassword === user.email) {

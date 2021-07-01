@@ -3,17 +3,9 @@
 import React from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 import * as S from './styles';
+import { CartGameProps } from './types';
 
-interface CompletedGameCardProps {
-  itemId: string;
-  color: string;
-  type: string;
-  selectedNumbers: string;
-  price: number;
-  handleDeleteFromCart: (id: string) => void;
-}
-
-const CompletedGameCard: React.FC<CompletedGameCardProps> = ({
+export const CartGameCard: React.FC<CartGameProps> = ({
   color,
   type,
   selectedNumbers,
@@ -41,5 +33,3 @@ const CompletedGameCard: React.FC<CompletedGameCardProps> = ({
     </S.Wrapper>
   );
 };
-
-export default CompletedGameCard;

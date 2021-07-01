@@ -1,36 +1,18 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable array-callback-return */
 /* eslint-disable prettier/prettier */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-alert */
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications'
-import CartGameCard from '../../components/CartGameCard';
-import GameNumber from '../../components/GameNumber';
-import SelectGameButton from '../../components/SelectGameButton';
+import { CartGameCard } from '../../components/CartGameCard';
+import { BetNumber } from '../../components/BetNumber';
+import { GameTypeButton } from '../../components/GameTypeButton';
 import { addItemsToReduxCart } from '../../store/modules/cart/actions';
 import * as S from './styles';
 import { ICartItem } from '../../store/modules/cart/types';
 import { formatValue } from '../../utils/formatValue';
-
-interface GameProps {
-  type: string;
-  description: string;
-  range: number;
-  price: number;
-  maxNumber: number;
-  color: string;
-  minCartValue: number;
-}
-
-interface NumberProps {
-  value: number;
-}
-
+import { GameProps, IFetchGame, NumberProps } from './types';
 
 const Games: React.FC<NumberProps> = () => {
   const [games, setGames] = useState<GameProps[]>([]);
@@ -72,9 +54,7 @@ const Games: React.FC<NumberProps> = () => {
       numbers.splice(numbers.indexOf(newEntry), 1);
       setChoosedNumbers(numbers);
     } else if (numbers.length >= limit) {
-      alert(
-        `Já foram selecionados o número limite do jogo: ${limit}, finalize adicionando ao carrinho. 🛒`,
-      );
+      addToast(`Já foram selecionados o número limite do jogo: ${limit}, finalize adicionando ao carrinho. 🛒`, { appearance: 'warning', autoDismiss: true })
     } else {
       numbers.push(newEntry);
       setChoosedNumbers(numbers);
@@ -137,6 +117,7 @@ const Games: React.FC<NumberProps> = () => {
     let newTotal = total;
     const newCartItem = {
       id: new Date().toISOString(),
+      date: new Date().toLocaleDateString('pt-BR'),
       choosenNumbers: numbers.sort((a, b) => a - b).toString(),
       gameType: selectedGame,
       gamePrice: price,
@@ -174,7 +155,7 @@ const Games: React.FC<NumberProps> = () => {
   useEffect(() => {
     async function loadGames() {
       const response = await axios.get('games.json');
-      const data = response.data.types.map((item: any) => ({
+      const data = response.data.types.map((item: IFetchGame) => ({
         type: item.type,
         description: item.description,
         range: item.range,
@@ -213,20 +194,20 @@ const Games: React.FC<NumberProps> = () => {
           </S.Title>
           <p>Choose a game</p>
           {games.map(game => (
-            <SelectGameButton
+            <GameTypeButton
               onClick={() => handleSelectGame(game)}
               active={game.type === selectedGame}
               color={game.color}
               key={game.type}
             >
               {game.type}
-            </SelectGameButton>
+            </GameTypeButton>
           ))}
           <p>Fill your bet</p>
           <S.Description>{description}</S.Description>
           <S.Numbers>
             {betNumbers.map(number => (
-              <GameNumber
+              <BetNumber
                 isActive={choosedNumbers.includes(number + 1)}
                 key={number}
                 value={number}
@@ -256,6 +237,7 @@ const Games: React.FC<NumberProps> = () => {
         <S.Cart>
           <h1>CART</h1>
           <S.CartList>
+            {cartList.length === 0 && <span>This cart is empty.</span>}
             {cartList &&
               cartList.map(item => {
                 return (

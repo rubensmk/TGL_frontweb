@@ -48,7 +48,11 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "array-callback-return": "off",
+    "no-return-assign": "off",
+    "no-alert": "off",
+    "no-plusplus": "off"
   },
   "settings": {
     "import/resolver": {

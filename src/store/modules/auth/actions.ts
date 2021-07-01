@@ -10,3 +10,12 @@ export function registerNewUser(user: IUser) {
     },
   };
 }
+
+export function logIn(response: boolean) {
+  return {
+    type: 'LOGIN_USER',
+    payload: {
+      response,
+    },
+  };
+}

@@ -1,34 +1,16 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import CompletedGameCard from '../../components/CompletedGameCard';
-import SelectGameButton from '../../components/SelectGameButton';
+import { CompletedCard } from '../../components/CompletedCard';
+import { GameTypeButton } from '../../components/GameTypeButton';
 import { IState } from '../../store';
 import { ICartItem } from '../../store/modules/cart/types';
 import * as S from './styles';
 import { formatValue } from '../../utils/formatValue';
-
-interface GameProps {
-  type: string;
-  description: string;
-  range: number;
-  price: number;
-  maxNumber: number;
-  color: string;
-  minCartValue: number;
-}
-
-interface CartProps {
-  id: string;
-  choosenNumbers: string;
-  gameType: string;
-  gamePrice: number;
-  gameColor: string;
-}
+import { CartProps, GameProps, IFetchGame } from '../Games/types';
 
 const SignIn: React.FC = () => {
   const reduxCart = useSelector<IState, ICartItem[]>(state => state.cart.items);
@@ -45,7 +27,7 @@ const SignIn: React.FC = () => {
   useEffect(() => {
     async function loadGames() {
       const response = await axios.get('games.json');
-      const data = response.data.types.map((item: any) => ({
+      const data = response.data.types.map((item: IFetchGame) => ({
         type: item.type,
         description: item.description,
         range: item.range,
@@ -56,7 +38,6 @@ const SignIn: React.FC = () => {
       }));
       setGames(data);
     }
-
     loadGames();
   }, []);
 
@@ -80,14 +61,14 @@ const SignIn: React.FC = () => {
           <S.Filters>
             <p>Filters</p>
             {games.map(game => (
-              <SelectGameButton
+              <GameTypeButton
                 onClick={() => handleFilter(game.type)}
                 active={game.type === selectedFilter}
                 color={game.color}
                 key={game.type}
               >
                 {game.type}
-              </SelectGameButton>
+              </GameTypeButton>
             ))}
           </S.Filters>
           <Link to="/games" className="new-bet button">
@@ -97,10 +78,12 @@ const SignIn: React.FC = () => {
         </S.Options>
 
         <S.RecentGames>
+          {reduxCart.length === 0 && filteredCart.length === 0 && <span>No recent games available.</span>}
           {selectedFilter === ''
             ? reduxCart.map(item => (
-              <CompletedGameCard
+              <CompletedCard
                 key={item.id}
+                date={item.date}
                 listNumbers={item.choosenNumbers}
                 color={item.gameColor}
                 type={item.gameType}
@@ -108,8 +91,9 @@ const SignIn: React.FC = () => {
               />
             ))
             : filteredCart.map(item => (
-              <CompletedGameCard
+              <CompletedCard
                 key={item.id}
+                date={item.date}
                 listNumbers={item.choosenNumbers}
                 color={item.gameColor}
                 type={item.gameType}

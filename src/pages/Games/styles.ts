@@ -165,6 +165,15 @@ export const Cart = styled.aside`
 export const CartList = styled.div`
   width: 100%;
   height: 400px;
+
+  span {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 200;
+    color: var(--light-gray);
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 export const CartTotal = styled.div`

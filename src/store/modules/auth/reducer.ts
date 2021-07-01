@@ -3,6 +3,7 @@ import { IUsersState } from './types';
 
 const INITIAL_STATE: IUsersState = {
   users: [],
+  loggedIn: false,
 };
 
 const auth: Reducer<IUsersState> = (state = INITIAL_STATE, action) => {
@@ -12,6 +13,14 @@ const auth: Reducer<IUsersState> = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         users: [...state.users, user],
+      };
+      break;
+    }
+    case 'LOGIN_USER': {
+      const { response } = action.payload;
+      return {
+        ...state,
+        loggedIn: response,
       };
     }
     default: {

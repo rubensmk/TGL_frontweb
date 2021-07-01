@@ -6,6 +6,11 @@ export const Container = styled.main`
   display: flex;
   justify-content: space-around;
   align-items: center;
+
+  @media(max-width:768px){
+    flex-direction: column;
+    justify-content:center;
+  }
 `;
 
 export const Title = styled.div`
@@ -33,6 +38,22 @@ export const Title = styled.div`
     font-size:84px;
     color: var(--gray);
   }
+
+  @media(max-width:768px){
+    h2{
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+    h1{
+      font-size:28px;
+      margin-bottom:15px;
+    }
+    button{
+      width:108px;
+      height:28px;
+      margin-bottom:5px;
+    }
+  }
 `;
 
 export const Auth = styled.div`
@@ -44,7 +65,6 @@ export const Auth = styled.div`
     font-size:35px;
     color: var(--gray);
   }
-
   form{
     display: flex;
     flex-direction: column;
@@ -69,8 +89,7 @@ export const Auth = styled.div`
 
     &::placeholder{
     color: var(--light-gray)
-  }
-
+    }
   }
 
   .forgot{
@@ -121,6 +140,33 @@ export const Auth = styled.div`
 
     &:hover{
       opacity:0.7;
+    }
+  }
+
+  @media(max-width:768px){
+    h2{
+      font-size: 26px;
+      margin-top: 15px;
+    }
+  }
+  @media(max-width:400px){
+    .forgot{
+      font-size:18px;
+      }
+    form{
+    width: 280px;
+    height: 280px;
+    margin-top: 10px;
+    }
+    .login{
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+    width: 100%;
+    height: 35px;
+    }
+    input{
+      width:260px;
     }
   }
 

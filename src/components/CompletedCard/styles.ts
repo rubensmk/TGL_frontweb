@@ -18,6 +18,7 @@ export const Container = styled.div<ContainerProps>`
 
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
+  border-radius: 5px;
   background-color: white;
 
   ${props =>

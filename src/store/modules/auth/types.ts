@@ -6,4 +6,5 @@ export interface IUser {
 
 export interface IUsersState {
   users: IUser[];
+  loggedIn: boolean;
 }

@@ -8,7 +8,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean;
 };
 
-const SelectGameButton: React.FC<ButtonProps> = ({
+export const GameTypeButton: React.FC<ButtonProps> = ({
   children,
   color,
   active,
@@ -20,5 +20,3 @@ const SelectGameButton: React.FC<ButtonProps> = ({
     </S.Container>
   );
 };
-
-export default SelectGameButton;
