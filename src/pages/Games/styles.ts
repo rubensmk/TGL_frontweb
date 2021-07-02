@@ -55,16 +55,42 @@ export const Header = styled.header`
       }
     }
   }
+
+  @media (max-width: 1024px) {
+    height: 64px;
+    h1 {
+      font-size: 36px;
+    }
+    nav {
+      .home,
+      .account,
+      .logout {
+        font-size: 18px;
+      }
+    }
+  }
 `;
 
 export const Content = styled.div`
   display: flex;
-  margin: 74px 200px 35px 130px;
+  width: 1860px;
+  padding: 74px 10px 0 130px;
+
+  @media (max-width: 1440px) {
+    width: 1440px;
+  }
+  @media (max-width: 1024px) {
+    padding: 52px 10px 0 130px;
+    width: 1024px;
+    flex-direction: column;
+  }
+  @media (max-width: 768px) {
+    width: 768px;
+    padding: 46px 20px 0 100px;
+  }
 `;
 
 export const Game = styled.div`
-  margin-right: 20px;
-
   p {
     color: var(--gray);
     font-size: 18px;
@@ -75,6 +101,35 @@ export const Game = styled.div`
     }
     &:nth-child(6) {
       margin-top: 28px;
+    }
+  }
+
+  @media (max-width: 1440px) {
+    p {
+      color: var(--gray);
+      font-size: 16px;
+      margin: 0;
+
+      &:nth-child(2) {
+        margin-bottom: 18px;
+      }
+      &:nth-child(6) {
+        margin-top: 22px;
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    p {
+      color: var(--gray);
+      font-size: 16px;
+      margin: 0;
+
+      &:nth-child(2) {
+        margin-bottom: 16px;
+      }
+      &:nth-child(6) {
+        margin-top: 20px;
+      }
     }
   }
 `;
@@ -89,13 +144,28 @@ export const Title = styled.h1`
     font-size: 24px;
     font-weight: 200;
   }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    span {
+      font-size: 18px;
+    }
+  }
 `;
 
-export const Description = styled.span`
-  width: 648px;
-  color: var(--light-gray);
-  font-size: 18px;
-  font-weight: 200;
+export const Description = styled.div`
+  width: 900px;
+  span {
+    color: var(--light-gray);
+    font-size: 18px;
+    font-weight: 200;
+  }
+  @media (max-width: 1440px) {
+    width: 700px;
+  }
+  @media (max-width: 768px) {
+    width: 600px;
+  }
 `;
 
 export const Numbers = styled.div`
@@ -104,11 +174,27 @@ export const Numbers = styled.div`
   width: 900px;
   flex-wrap: wrap;
   margin-top: 27px;
+
+  span {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 200;
+    color: var(--light-gray);
+    display: flex;
+    justify-content: center;
+  }
+  @media (max-width: 1440px) {
+    width: 760px;
+  }
+  @media (max-width: 768px) {
+    width: 600px;
+  }
 `;
 
 export const GameOptions = styled.div`
   display: flex;
   margin-top: 44px;
+  margin-bottom: 44px;
 
   button {
     display: flex;
@@ -145,13 +231,25 @@ export const GameOptions = styled.div`
       color: white;
     }
   }
+
+  @media (max-width: 768px) {
+    button {
+      margin-right: 0.6rem;
+      &.addToCart {
+        margin-left: 4rem;
+      }
+    }
+  }
 `;
 
-export const Cart = styled.aside`
+export const Cart = styled.div`
+  position: absolute;
+  right: 300px;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--border-gray);
   border-radius: 0.6rem;
-  width: 24rem;
-  height: 700px;
+  width: 450px;
 
   h1 {
     color: var(--light-gray);
@@ -160,26 +258,6 @@ export const Cart = styled.aside`
     margin-bottom: 2.25rem;
     margin-left: 1.25rem;
   }
-`;
-
-export const CartList = styled.div`
-  width: 100%;
-  height: 400px;
-
-  span {
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 200;
-    color: var(--light-gray);
-    display: flex;
-    justify-content: center;
-  }
-`;
-
-export const CartTotal = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
 
   div {
     display: flex;
@@ -219,5 +297,40 @@ export const CartTotal = styled.div`
     font-size: 2.25rem;
     font-weight: bold;
     font-style: italic;
+  }
+
+  @media (max-width: 1440px) {
+    position: absolute;
+    right: 100px;
+    width: 380px;
+  }
+  @media (max-width: 1024px) {
+    position: static;
+    width: 600px;
+    margin-bottom: 40px;
+  }
+`;
+
+export const CartList = styled.div`
+  width: 100%;
+  flex-direction: column;
+  overflow: auto;
+  height: 400px;
+
+  span {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 200;
+    color: var(--light-gray);
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 1440px) {
+    height: 280px;
+  }
+
+  @media (max-width: 1440px) {
+    height: 200px;
   }
 `;

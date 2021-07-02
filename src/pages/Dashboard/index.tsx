@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { CompletedCard } from '../../components/CompletedCard';
 import { GameTypeButton } from '../../components/GameTypeButton';
@@ -46,37 +45,38 @@ const SignIn: React.FC = () => {
       <S.Header>
         <h1>TGL</h1>
         <nav>
-          <Link to="/" className="account button">
+          <S.AccountButton to="/">
             Account
-          </Link>
-          <Link to="/" className="logout button">
+          </S.AccountButton>
+          <S.LogOutButton to="/">
             Sair
             <FiArrowRight />
-          </Link>
+          </S.LogOutButton>
         </nav>
       </S.Header>
       <S.Content>
         <S.Options>
-          <h2>RECENT GAMES</h2>
           <S.Filters>
+            <h2>RECENT GAMES</h2>
             <p>Filters</p>
-            {games.map(game => (
-              <GameTypeButton
-                onClick={() => handleFilter(game.type)}
-                active={game.type === selectedFilter}
-                color={game.color}
-                key={game.type}
-              >
-                {game.type}
-              </GameTypeButton>
-            ))}
+            <div>
+              {games.map(game => (
+                <GameTypeButton
+                  onClick={() => handleFilter(game.type)}
+                  active={game.type === selectedFilter}
+                  color={game.color}
+                  key={game.type}
+                >
+                  {game.type}
+                </GameTypeButton>
+              ))}
+            </div>
           </S.Filters>
-          <Link to="/games" className="new-bet button">
+          <S.NewBetButton to="/games">
             New Bet
             <FiArrowRight />
-          </Link>
+          </S.NewBetButton>
         </S.Options>
-
         <S.RecentGames>
           {reduxCart.length === 0 && filteredCart.length === 0 && <span>No recent games available.</span>}
           {selectedFilter === ''

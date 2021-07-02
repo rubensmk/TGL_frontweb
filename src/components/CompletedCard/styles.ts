@@ -10,10 +10,11 @@ export const Container = styled.div<ContainerProps>`
   flex-direction: column;
   justify-content: center;
 
-  width: 460px;
-  height: 104px;
+  width: 60%;
+  height: 120px;
   margin-top: 38px;
   padding-left: 15px;
+  padding-right: 15px;
 
 
   border-top-left-radius: 5px;
@@ -29,6 +30,7 @@ export const Container = styled.div<ContainerProps>`
 
   strong {
     font-size: 20px;
+    overflow-wrap: break-word;
     color: var(--gray);
     margin-bottom: 15px;
   }

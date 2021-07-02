@@ -123,18 +123,24 @@ const Games: React.FC<NumberProps> = () => {
       gamePrice: price,
       gameColor: color,
     };
-    newTotal += newCartItem.gamePrice;
-    setTotal(newTotal);
-    setCartList([...cartList, newCartItem]);
 
+    if (numbers.length === limit) {
+      newTotal += newCartItem.gamePrice;
+      setTotal(newTotal);
+      setCartList([...cartList, newCartItem]);
+    } else {
+      addToast(`É preciso escolher o número limite de ${limit} números para finalizar uma jogada.`, { appearance: 'warning', autoDismiss: true })
+    }
   };
 
   const handleRemoveFromCart = async (id: string) => {
+    let totalPrice = 0;
     const cartItems = [...cartList];
     const cartItemsFiltered = cartItems.filter((item) => item.id !== id);
 
+    cartItemsFiltered.map((item) => totalPrice += item.gamePrice);
+    setTotal(totalPrice);
     setCartList(cartItemsFiltered);
-
   }
 
   const handleSave = useCallback((allCartItems: ICartItem[]) => {
@@ -204,8 +210,9 @@ const Games: React.FC<NumberProps> = () => {
             </GameTypeButton>
           ))}
           <p>Fill your bet</p>
-          <S.Description>{description}</S.Description>
+          <S.Description><span>{description}</span></S.Description>
           <S.Numbers>
+            {betNumbers.length === 0 && <span>Choose a game to fill the numbers</span>}
             {betNumbers.map(number => (
               <BetNumber
                 isActive={choosedNumbers.includes(number + 1)}
@@ -253,22 +260,20 @@ const Games: React.FC<NumberProps> = () => {
                 );
               })}
           </S.CartList>
-          <S.CartTotal>
-            <div>
-              <h1>
-                CART <span>TOTAL:</span>
-              </h1>
-              <p>{formatValue(total)}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => handleSave(cartList)}
-            >
-              Save
-              <FiArrowRight />
-            </button>
-          </S.CartTotal>
+          <div>
+            <h1>
+              CART <span>TOTAL:</span>
+            </h1>
+            <p>{formatValue(total)}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => handleSave(cartList)}
+          >
+            Save
+            <FiArrowRight />
+          </button>
         </S.Cart>
       </S.Content>
     </S.Container>
