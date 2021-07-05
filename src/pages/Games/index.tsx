@@ -199,16 +199,18 @@ const Games: React.FC<NumberProps> = () => {
             NEW BET <span>FOR {title}</span>
           </S.Title>
           <p>Choose a game</p>
-          {games.map(game => (
-            <GameTypeButton
-              onClick={() => handleSelectGame(game)}
-              active={game.type === selectedGame}
-              color={game.color}
-              key={game.type}
-            >
-              {game.type}
-            </GameTypeButton>
-          ))}
+          <div className="gamebuttons">
+            {games.map(game => (
+              <GameTypeButton
+                onClick={() => handleSelectGame(game)}
+                active={game.type === selectedGame}
+                color={game.color}
+                key={game.type}
+              >
+                {game.type}
+              </GameTypeButton>
+            ))}
+          </div>
           <p>Fill your bet</p>
           <S.Description><span>{description}</span></S.Description>
           <S.Numbers>
@@ -224,12 +226,14 @@ const Games: React.FC<NumberProps> = () => {
           </S.Numbers>
 
           <S.GameOptions>
-            <button type="button" onClick={handleCompleteGame}>
-              Complete Game
-            </button>
-            <button type="button" onClick={handleClearGame}>
-              Clear Game
-            </button>
+            <div>
+              <button type="button" onClick={handleCompleteGame}>
+                Complete Game
+              </button>
+              <button type="button" onClick={handleClearGame}>
+                Clear Game
+              </button>
+            </div>
             <button
               type="button"
               onClick={handleAddToCart}

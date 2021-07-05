@@ -2,9 +2,11 @@ import styled from 'styled-components';
 
 export const Container = styled.main`
   height: 100vh;
+  width: 100%;
 `;
 export const Header = styled.header`
   height: 76px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,16 +58,31 @@ export const Header = styled.header`
     }
   }
 
-  @media (max-width: 1024px) {
-    height: 64px;
+  @media (max-width: 678px) {
+    height: 56px;
+
     h1 {
-      font-size: 36px;
+      font-size: 30px;
+      margin: 16px 24px 5px 64px;
     }
     nav {
+      margin-right: 90px;
+    }
+  }
+  @media (max-width: 520px) {
+    height: 56px;
+
+    h1 {
+      font-size: 24px;
+      margin: 16px 14px 5px 18px;
+    }
+    nav {
+      margin-right: 5px;
       .home,
       .account,
       .logout {
-        font-size: 18px;
+        font-size: 16px;
+        margin-right: 18px;
       }
     }
   }
@@ -73,24 +90,30 @@ export const Header = styled.header`
 
 export const Content = styled.div`
   display: flex;
-  width: 1860px;
-  padding: 74px 10px 0 130px;
+  width: 100%;
+  padding: 74px 20px 0 130px;
 
-  @media (max-width: 1440px) {
-    width: 1440px;
-  }
-  @media (max-width: 1024px) {
-    padding: 52px 10px 0 130px;
-    width: 1024px;
+  @media (max-width: 1325px) {
     flex-direction: column;
+    padding-bottom: 40px;
   }
-  @media (max-width: 768px) {
-    width: 768px;
-    padding: 46px 20px 0 100px;
+  @media (max-width: 678px) {
+    padding: 44px 20px 0 60px;
+  }
+  @media (max-width: 520px) {
+    padding: 28px 5px 0 14px;
+  }
+  @media (max-width: 430px) {
+    padding: 28px 5px 0 5px;
+  }
+  @media (max-width: 380px) {
+    align-items: center;
+    padding: 28px 5px 0 5px;
   }
 `;
 
 export const Game = styled.div`
+  width: 70%;
   p {
     color: var(--gray);
     font-size: 18px;
@@ -103,33 +126,17 @@ export const Game = styled.div`
       margin-top: 28px;
     }
   }
-
-  @media (max-width: 1440px) {
-    p {
-      color: var(--gray);
-      font-size: 16px;
-      margin: 0;
-
-      &:nth-child(2) {
-        margin-bottom: 18px;
-      }
-      &:nth-child(6) {
-        margin-top: 22px;
-      }
-    }
+  div {
+    display: flex;
+    margin-bottom: 20px;
   }
-  @media (max-width: 768px) {
-    p {
-      color: var(--gray);
-      font-size: 16px;
-      margin: 0;
 
-      &:nth-child(2) {
-        margin-bottom: 16px;
-      }
-      &:nth-child(6) {
-        margin-top: 20px;
-      }
+  @media (max-width: 1324px) {
+    width: 100%;
+  }
+  @media (max-width: 520px) {
+    div.gamebuttons {
+      flex-direction: column;
     }
   }
 `;
@@ -144,34 +151,23 @@ export const Title = styled.h1`
     font-size: 24px;
     font-weight: 200;
   }
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-    span {
-      font-size: 18px;
-    }
-  }
 `;
 
 export const Description = styled.div`
-  width: 900px;
+  width: 100%;
+  padding-right: 80px;
+
   span {
     color: var(--light-gray);
     font-size: 18px;
     font-weight: 200;
-  }
-  @media (max-width: 1440px) {
-    width: 700px;
-  }
-  @media (max-width: 768px) {
-    width: 600px;
   }
 `;
 
 export const Numbers = styled.div`
   display: flex;
   align-items: center;
-  width: 900px;
+  width: 100%;
   flex-wrap: wrap;
   margin-top: 27px;
 
@@ -183,18 +179,13 @@ export const Numbers = styled.div`
     display: flex;
     justify-content: center;
   }
-  @media (max-width: 1440px) {
-    width: 760px;
-  }
-  @media (max-width: 768px) {
-    width: 600px;
-  }
 `;
 
 export const GameOptions = styled.div`
   display: flex;
   margin-top: 44px;
   margin-bottom: 44px;
+  width: 100%;
 
   button {
     display: flex;
@@ -214,15 +205,15 @@ export const GameOptions = styled.div`
     color: var(--green);
     transition: opacity 0.2s;
 
-    &.addToCart {
-      text-align: center;
-      margin-left: 9rem;
-      background: var(--green);
-      color: white;
-    }
     &:hover {
       opacity: 0.7;
     }
+  }
+  .addToCart {
+    text-align: center;
+    margin-left: 9rem;
+    background: var(--green);
+    color: white;
 
     svg {
       width: 1.25rem;
@@ -231,25 +222,78 @@ export const GameOptions = styled.div`
       color: white;
     }
   }
+  div {
+    display: flex;
+    flex-direction: row;
+  }
 
-  @media (max-width: 768px) {
+  @media (max-width: 840px) {
     button {
-      margin-right: 0.6rem;
+      width: 8.25rem;
+      height: 3.25rem;
+      margin-right: 1rem;
+
       &.addToCart {
-        margin-left: 4rem;
+        margin-left: 5rem;
+      }
+    }
+  }
+  @media (max-width: 680px) {
+    flex-direction: column;
+    align-items: center;
+
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    button {
+      width: 12.25rem;
+      height: 4.25rem;
+
+      &.addToCart {
+        margin: 0;
+        margin-top: 30px;
+      }
+    }
+  }
+  @media (max-width: 520px) {
+    width: 90%;
+    button {
+      width: 9.25rem;
+      height: 4.25rem;
+
+      &.addToCart {
+        margin-top: 10px;
+      }
+    }
+  }
+  @media (max-width: 430px) {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    div {
+      justify-content: center;
+      flex-direction: column;
+    }
+    button {
+      width: 12.25rem;
+      height: 4.25rem;
+
+      &.addToCart {
+        width: 15rem;
       }
     }
   }
 `;
 
 export const Cart = styled.div`
-  position: absolute;
-  right: 300px;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border-gray);
   border-radius: 0.6rem;
-  width: 450px;
+  height: 100%;
+  width: 420px;
 
   h1 {
     color: var(--light-gray);
@@ -299,15 +343,18 @@ export const Cart = styled.div`
     font-style: italic;
   }
 
-  @media (max-width: 1440px) {
-    position: absolute;
-    right: 100px;
+  @media (max-width: 1380px) {
+    width: 360px;
+  }
+
+  @media (max-width: 1325px) {
+    width: 400px;
+  }
+  @media (max-width: 430px) {
     width: 380px;
   }
-  @media (max-width: 1024px) {
-    position: static;
-    width: 600px;
-    margin-bottom: 40px;
+  @media (max-width: 400px) {
+    width: 360px;
   }
 `;
 
@@ -315,7 +362,7 @@ export const CartList = styled.div`
   width: 100%;
   flex-direction: column;
   overflow: auto;
-  height: 400px;
+  height: 280px;
 
   span {
     font-size: 18px;
@@ -324,13 +371,5 @@ export const CartList = styled.div`
     color: var(--light-gray);
     display: flex;
     justify-content: center;
-  }
-
-  @media (max-width: 1440px) {
-    height: 280px;
-  }
-
-  @media (max-width: 1440px) {
-    height: 200px;
   }
 `;

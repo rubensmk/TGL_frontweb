@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { FiTrash2 } from 'react-icons/fi';
+import { formatValue } from '../../utils/formatValue';
 import * as S from './styles';
 import { CartGameProps } from './types';
 
@@ -15,20 +16,13 @@ export const CartGameCard: React.FC<CartGameProps> = ({
 }) => {
   return (
     <S.Wrapper>
-      <button type="button" onClick={() => handleDeleteFromCart(itemId)}>
-        <FiTrash2 />
-      </button>
+      <FiTrash2 onClick={() => handleDeleteFromCart(itemId)} />
       <S.Container color={color}>
         <strong>{selectedNumbers}</strong>
-        <div>
+        <S.Content color={color}>
           <h3>{type}</h3>
-          <p>
-            {price.toLocaleString('pt-BR', {
-              style: 'currency',
-              currency: 'BRL',
-            })}
-          </p>
-        </div>
+          <h4>{formatValue(price)}</h4>
+        </S.Content>
       </S.Container>
     </S.Wrapper>
   );

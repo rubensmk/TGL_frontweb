@@ -24,4 +24,10 @@ export const Container = styled.button<ContainerProps>`
         background: var(--green);
       `}
 
+    @media (max-width:425px){
+      width:3rem;
+      height:3rem;
+      font-size: 1.2rem;
+    }
+
 `;

@@ -6,36 +6,25 @@ interface ContainerProps {
 }
 
 export const Wrapper = styled.div`
-  @media all {
-    border:0;
-    background: transparent;
     display: flex;
     flex-direction:row;
     align-items: center;
     margin-bottom: 28px;
     width: 360px;
 
-    button{
-      border:0;
-      background: transparent;
-      width: 60px;
-      height: 64px;
-
       svg{
-      width: 20px;
-      height: 24px;
-      margin-right:14px;
-      margin-left:12px;
-      color:var(--gray);
+        width: 20px;
+        height: 24px;
+        margin-right:14px;
+        margin-left:12px;
+        color:var(--gray);
       }
+    @media(max-width:1380px){
+      width:350px;
     }
-  }
-
 `;
 
 export const Container = styled.div<ContainerProps>`
-
-@media all {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -60,21 +49,20 @@ export const Container = styled.div<ContainerProps>`
       margin-bottom: 12px;
     }
 
-    div{
+`;
 
-      display: flex;
-      align-items: center;
+export const Content = styled.div<ContainerProps>`
+  display: flex;
+  align-items: center;
 
-      p {
-        color: var(--gray);
-        font-weight: 200;
-        margin-left: 14px;
-        font-size: 16px;
-        }
-
-      h3 {
-        ${props => props.color && css` color: ${props.color}`}
+  h3{
+  ${props => props.color && css` color: ${props.color}`}
     }
-  }
-}
+
+  h4{
+    color: var(--gray);
+    font-weight: 200;
+    margin-left: 12px;
+    font-size: 18px;
+    }
 `;

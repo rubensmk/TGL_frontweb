@@ -36,4 +36,10 @@ export const Container = styled.button<ContainerProps>`
       background-color: ${props.color};
       color: var(--white);
     `}
+
+  @media(max-width:520px) {
+    width: 213px;
+    height: 54px;
+    margin-bottom: 18px;
+  }
 `;
