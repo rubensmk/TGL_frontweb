@@ -264,7 +264,7 @@ export const GameOptions = styled.div`
       height: 4.25rem;
 
       &.addToCart {
-        margin-top: 10px;
+        margin-top: 5px;
       }
     }
   }
@@ -275,6 +275,7 @@ export const GameOptions = styled.div`
     div {
       justify-content: center;
       flex-direction: column;
+      gap: 10px;
     }
     button {
       width: 12.25rem;
@@ -356,6 +357,12 @@ export const Cart = styled.div`
   @media (max-width: 400px) {
     width: 360px;
   }
+  @media (max-width: 375px) {
+    width: 340px;
+  }
+  @media (max-width: 355px) {
+    width: 300px;
+  }
 `;
 
 export const CartList = styled.div`
@@ -371,5 +378,9 @@ export const CartList = styled.div`
     color: var(--light-gray);
     display: flex;
     justify-content: center;
+  }
+
+  @media (max-width: 375px) {
+    align-items: center;
   }
 `;
