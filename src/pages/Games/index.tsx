@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
@@ -13,6 +12,7 @@ import * as S from './styles';
 import { ICartItem } from '../../store/modules/cart/types';
 import { formatValue } from '../../utils/formatValue';
 import { GameProps, IFetchGame, NumberProps } from './types';
+import api from '../../services/api';
 
 const Games: React.FC<NumberProps> = () => {
   const [games, setGames] = useState<GameProps[]>([]);
@@ -160,8 +160,8 @@ const Games: React.FC<NumberProps> = () => {
 
   useEffect(() => {
     async function loadGames() {
-      const response = await axios.get('games.json');
-      const data = response.data.types.map((item: IFetchGame) => ({
+      const response = await api.get('games');
+      const data = response.data.data.map((item: IFetchGame) => ({
         type: item.type,
         description: item.description,
         range: item.range,

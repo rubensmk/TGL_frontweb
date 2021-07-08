@@ -1,39 +1,42 @@
 /* eslint-disable array-callback-return */
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
-import { useSelector } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import * as S from './styles';
-import { IState } from '../../store';
-import { IUser } from '../../store/modules/auth/types';
+import api from '../../services/api';
 
-const ResetPassword: React.FC = () => {
+const ForgotPassword: React.FC = () => {
   const [forgotPassword, setForgotPassword] = useState('');
-  const allUsers = useSelector<IState, IUser[]>(state => state.auth.users);
   const { addToast } = useToasts();
+  const history = useHistory();
 
   const handleResetPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForgotPassword(event.target.value);
   };
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    allUsers.map(user => {
-      if (forgotPassword === user.email) {
-        addToast(
-          'E-mail válido, foi enviado para o seu email o link de reset da senha!',
-          {
-            appearance: 'success',
-            autoDismiss: true,
-          },
-        );
-      } else {
-        addToast('E-mail inválido, tente novamente!', {
-          appearance: 'error',
+
+    try {
+      await api.post('passwords', {
+        email: forgotPassword,
+        redirect_url: 'http://localhost:3000/',
+      });
+
+      addToast(
+        'E-mail válido, foi enviado para o seu email o link de reset da senha!',
+        {
+          appearance: 'success',
           autoDismiss: true,
-        });
-      }
-    });
+        },
+      );
+      history.push('/');
+    } catch (error) {
+      addToast('E-mail inválido, tente novamente!', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    }
   };
 
   return (
@@ -71,4 +74,4 @@ const ResetPassword: React.FC = () => {
   );
 };
 
-export default ResetPassword;
+export default ForgotPassword;

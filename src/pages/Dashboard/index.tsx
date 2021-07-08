@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { CompletedCard } from '../../components/CompletedCard';
 import { GameTypeButton } from '../../components/GameTypeButton';
 import { IState } from '../../store';
@@ -10,6 +9,7 @@ import { ICartItem } from '../../store/modules/cart/types';
 import * as S from './styles';
 import { formatValue } from '../../utils/formatValue';
 import { CartProps, GameProps, IFetchGame } from '../Games/types';
+import api from '../../services/api';
 
 const SignIn: React.FC = () => {
   const reduxCart = useSelector<IState, ICartItem[]>(state => state.cart.items);
@@ -25,8 +25,8 @@ const SignIn: React.FC = () => {
   };
   useEffect(() => {
     async function loadGames() {
-      const response = await axios.get('games.json');
-      const data = response.data.types.map((item: IFetchGame) => ({
+      const response = await api.get('games');
+      const data = response.data.data.map((item: IFetchGame) => ({
         type: item.type,
         description: item.description,
         range: item.range,
@@ -37,7 +37,12 @@ const SignIn: React.FC = () => {
       }));
       setGames(data);
     }
+    async function loadCompletedGames() {
+      const response = await api.get('users/14');
+      console.log(response.data)
+    }
     loadGames();
+    loadCompletedGames();
   }, []);
 
   return (

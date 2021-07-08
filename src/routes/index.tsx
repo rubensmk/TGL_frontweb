@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
-import ResetPassword from '../pages/ResetPassword';
+import ForgotPassword from '../pages/ForgotPassword';
 import Dashboard from '../pages/Dashboard';
 import Games from '../pages/Games';
 import { IState } from '../store';
@@ -16,7 +16,7 @@ const Routes: React.FC = () => {
     <Switch>
       <Route path="/" exact component={SignIn} />
       <Route path="/register" exact component={SignUp} />
-      <Route path="/password" exact component={ResetPassword} />
+      <Route path="/password" exact component={ForgotPassword} />
       {isLogged && (
         <>
           <Route path="/dashboard" exact component={Dashboard} />

@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
-import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import * as S from './styles';
-import { registerNewUser } from '../../store/modules/auth/actions';
+import api from '../../services/api';
 
 const SignUp: React.FC = () => {
   const [registerName, setRegisterName] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
-  const dispatch = useDispatch();
   const history = useHistory();
   const { addToast } = useToasts();
 
@@ -25,20 +23,29 @@ const SignUp: React.FC = () => {
   ) => {
     setRegisterPassword(event.target.value);
   };
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const newUser = {
-      name: registerName,
-      email: registerEmail,
-      password: registerPassword,
-    };
-    dispatch(registerNewUser(newUser));
-    addToast('Cadastro realizado com sucesso!', {
-      appearance: 'success',
-      autoDismiss: true,
-    });
-    history.push('/');
+    try {
+      await api.post('users', {
+        username: registerName,
+        email: registerEmail,
+        password: registerPassword,
+        password_confirmation: registerPassword,
+      });
+
+      addToast('Cadastro realizado com sucesso!', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
+
+      history.push('/');
+    } catch (error) {
+      addToast('Erro no cadastro, tente novamente.', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    }
   };
   return (
     <S.Container>

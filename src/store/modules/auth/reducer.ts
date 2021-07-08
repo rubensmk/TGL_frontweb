@@ -1,4 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { Reducer } from 'redux';
+import produce from 'immer';
 import { IUsersState } from './types';
 
 const INITIAL_STATE: IUsersState = {
@@ -14,14 +16,13 @@ const auth: Reducer<IUsersState> = (state = INITIAL_STATE, action) => {
         ...state,
         users: [...state.users, user],
       };
-      break;
     }
     case 'LOGIN_USER': {
       const { response } = action.payload;
-      return {
-        ...state,
-        loggedIn: response,
-      };
+
+      return produce(state, draft => {
+        draft.loggedIn = response;
+      });
     }
     default: {
       return state;
