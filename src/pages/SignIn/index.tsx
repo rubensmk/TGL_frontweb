@@ -30,16 +30,14 @@ const SignIn: React.FC = () => {
         password: enteredPassword,
       });
 
-      const { token } = response.data;
-
-      api.defaults.headers.authorization = `Bearer ${token}`;
+      const { token, user } = response.data;
 
       addToast('Sessão iniciada com sucesso, Seja Bem-Vindo!', {
         appearance: 'success',
         autoDismiss: true,
       });
 
-      dispatch(logIn(true));
+      dispatch(logIn({ token, user }));
       history.push('/dashboard');
     } catch (error) {
       addToast('E-mail ou senha incorreta!', {

@@ -1,6 +1,5 @@
 export interface ICartItem {
-  id: string;
-  date: string;
+  id: number;
   choosenNumbers: string;
   gameType: string;
   gamePrice: number;

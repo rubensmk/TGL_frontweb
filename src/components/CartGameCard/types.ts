@@ -1,8 +1,8 @@
 export interface CartGameProps {
-  itemId: string;
+  itemId: number;
   color: string;
   type: string;
   selectedNumbers: string;
   price: number;
-  handleDeleteFromCart: (id: string) => void;
+  handleDeleteFromCart: (id: number) => void;
 }

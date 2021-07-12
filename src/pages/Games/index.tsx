@@ -1,24 +1,27 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
-import { useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications'
+import { useSelector } from 'react-redux';
 import { CartGameCard } from '../../components/CartGameCard';
 import { BetNumber } from '../../components/BetNumber';
 import { GameTypeButton } from '../../components/GameTypeButton';
-import { addItemsToReduxCart } from '../../store/modules/cart/actions';
 import * as S from './styles';
 import { ICartItem } from '../../store/modules/cart/types';
 import { formatValue } from '../../utils/formatValue';
 import { GameProps, IFetchGame, NumberProps } from './types';
 import api from '../../services/api';
+import { IState } from '../../store';
+import { IUser } from '../../store/modules/auth/types';
 
 const Games: React.FC<NumberProps> = () => {
+  const user = useSelector<IState, IUser>(state => state.auth.user);
   const [games, setGames] = useState<GameProps[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
+  const [gameId, setGameId] = useState(0);
   const [color, setColor] = useState('');
   const [limit, setLimit] = useState(0);
   const [range, setRange] = useState(0);
@@ -28,7 +31,6 @@ const Games: React.FC<NumberProps> = () => {
   const [choosedNumbers, setChoosedNumbers] = useState<number[]>([]);
   const [cartList, setCartList] = useState<ICartItem[]>([]);
   const [total, setTotal] = useState(0);
-  const dispatch = useDispatch();
   const history = useHistory();
   const { addToast } = useToasts();
 
@@ -36,6 +38,7 @@ const Games: React.FC<NumberProps> = () => {
   const handleSelectGame = (game: GameProps) => {
     setChoosedNumbers([]);
     setSelectedGame(game.type);
+    setGameId(game.gameId);
     setMinCartValue(game.minCartValue);
     setColor(game.color);
     setPrice(game.price);
@@ -116,8 +119,7 @@ const Games: React.FC<NumberProps> = () => {
     const numbers = [...choosedNumbers];
     let newTotal = total;
     const newCartItem = {
-      id: new Date().toISOString(),
-      date: new Date().toLocaleDateString('pt-BR'),
+      id: gameId,
       choosenNumbers: numbers.sort((a, b) => a - b).toString(),
       gameType: selectedGame,
       gamePrice: price,
@@ -133,7 +135,7 @@ const Games: React.FC<NumberProps> = () => {
     }
   };
 
-  const handleRemoveFromCart = async (id: string) => {
+  const handleRemoveFromCart = async (id: number) => {
     let totalPrice = 0;
     const cartItems = [...cartList];
     const cartItemsFiltered = cartItems.filter((item) => item.id !== id);
@@ -143,25 +145,34 @@ const Games: React.FC<NumberProps> = () => {
     setCartList(cartItemsFiltered);
   }
 
-  const handleSave = useCallback((allCartItems: ICartItem[]) => {
+  const handleSave = async (allCartItems: ICartItem[]) => {
     if (total >= minCartValue) {
-      allCartItems.map(item => {
-        dispatch(addItemsToReduxCart(item))
-      });
-      history.push('/dashboard');
-      addToast('Suas apostas foram salvas com sucesso!, Boa sorte.', { appearance: 'success', autoDismiss: true })
+      try {
+        allCartItems.map(item => {
+          api.post('bets', {
+            choosenNumber: item.choosenNumbers,
+            gameType: item.gameType,
+            gamePrice: item.gamePrice,
+            gameColor: item.gameColor,
+            user_id: user.id,
+            game_id: item.id
+          })
+        });
+        history.push('/dashboard');
+        addToast('Suas apostas foram salvas com sucesso!, Boa sorte.', { appearance: 'success', autoDismiss: true })
+      } catch (error) {
+        addToast(`Erro ao salvar suas apostas, tente novamente.`, { appearance: 'error', autoDismiss: true })
+      }
     } else {
       addToast(`Você precisa completar o valor mínimo de ${formatValue(minCartValue)} para salvar.`, { appearance: 'warning', autoDismiss: true })
     }
-
-  },
-    [dispatch, history, total, minCartValue, addToast],
-  );
+  };
 
   useEffect(() => {
     async function loadGames() {
       const response = await api.get('games');
       const data = response.data.data.map((item: IFetchGame) => ({
+        gameId: item.id,
         type: item.type,
         description: item.description,
         range: item.range,

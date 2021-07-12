@@ -1,4 +1,5 @@
 export interface GameProps {
+  gameId: number;
   type: string;
   description: string;
   range: number;
@@ -8,6 +9,7 @@ export interface GameProps {
   minCartValue: number;
 }
 export interface IFetchGame {
+  id: number;
   type: string;
   description: string;
   range: number;
@@ -21,11 +23,14 @@ export interface NumberProps {
   value: number;
 }
 
-export interface CartProps {
+export interface CompletedGameProps {
   id: string;
-  date: string;
-  choosenNumbers: string;
+  choosenNumber: string;
   gameType: string;
   gamePrice: number;
   gameColor: string;
+  user_id: number;
+  game_id: number;
+  created_at: string;
+  updated_at: string;
 }

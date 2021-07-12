@@ -1,10 +1,16 @@
 export interface IUser {
-  name: string;
+  id: string;
+  username: string;
   email: string;
-  password: string;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface IUsersState {
-  users: IUser[];
+export interface IToken {
+  token: string;
+}
+export interface AuthState {
+  token: string;
+  user: IUser;
   loggedIn: boolean;
 }

@@ -4,23 +4,26 @@ import { FiArrowRight } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { CompletedCard } from '../../components/CompletedCard';
 import { GameTypeButton } from '../../components/GameTypeButton';
-import { IState } from '../../store';
-import { ICartItem } from '../../store/modules/cart/types';
 import * as S from './styles';
 import { formatValue } from '../../utils/formatValue';
-import { CartProps, GameProps, IFetchGame } from '../Games/types';
+import { CompletedGameProps, GameProps, IFetchGame } from '../Games/types';
 import api from '../../services/api';
+import { formatDate } from '../../utils/formatDate';
+import { IState } from '../../store';
+import { IUser } from '../../store/modules/auth/types';
+
 
 const SignIn: React.FC = () => {
-  const reduxCart = useSelector<IState, ICartItem[]>(state => state.cart.items);
   const [games, setGames] = useState<GameProps[]>([]);
   const [selectedFilter, setSelectedFilter] = useState('');
-  const [filteredCart, setFilteredCart] = useState<CartProps[]>([]);
+  const [completedCart, setCompletedCart] = useState<CompletedGameProps[]>([]);
+  const [filteredCart, setFilteredCart] = useState<CompletedGameProps[]>([]);
+  const user = useSelector<IState, IUser>(state => state.auth.user);
 
   const handleFilter = (type: string) => {
     let filtered = [...filteredCart];
     setSelectedFilter(prevState => (prevState === type ? '' : type));
-    filtered = reduxCart.filter(item => item.gameType === type);
+    filtered = completedCart.filter(item => item.gameType === type);
     setFilteredCart(filtered);
   };
   useEffect(() => {
@@ -38,12 +41,13 @@ const SignIn: React.FC = () => {
       setGames(data);
     }
     async function loadCompletedGames() {
-      const response = await api.get('users/14');
-      console.log(response.data)
+      const response = await api.get(`users/${user.id}`)
+      const { bets } = response.data
+      bets.map((item: CompletedGameProps) => setCompletedCart(prevState => [...prevState, item]))
     }
     loadGames();
     loadCompletedGames();
-  }, []);
+  }, [user.id]);
 
   return (
     <S.Container>
@@ -83,13 +87,13 @@ const SignIn: React.FC = () => {
           </S.NewBetButton>
         </S.Options>
         <S.RecentGames>
-          {reduxCart.length === 0 && filteredCart.length === 0 && <span>No recent games available.</span>}
+          {completedCart.length === 0 && filteredCart.length === 0 && <span>No recent games available.</span>}
           {selectedFilter === ''
-            ? reduxCart.map(item => (
+            ? completedCart.map(item => (
               <CompletedCard
                 key={item.id}
-                date={item.date}
-                listNumbers={item.choosenNumbers}
+                date={formatDate(item.created_at)}
+                listNumbers={item.choosenNumber}
                 color={item.gameColor}
                 type={item.gameType}
                 price={formatValue(item.gamePrice)}
@@ -98,8 +102,8 @@ const SignIn: React.FC = () => {
             : filteredCart.map(item => (
               <CompletedCard
                 key={item.id}
-                date={item.date}
-                listNumbers={item.choosenNumbers}
+                date={formatDate(item.created_at)}
+                listNumbers={item.choosenNumber}
                 color={item.gameColor}
                 type={item.gameType}
                 price={formatValue(item.gamePrice)}

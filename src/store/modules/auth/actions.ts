@@ -1,17 +1,12 @@
+import { IToken, IUser } from './types';
+
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
-import { IUser } from './types';
-
-export function registerNewUser(user: IUser) {
-  return {
-    type: 'REGISTER_NEW_USER',
-    payload: {
-      user,
-    },
-  };
+interface ResponseProps {
+  token: IToken;
+  user: IUser;
 }
 
-export function logIn(response: boolean) {
+export function logIn(response: ResponseProps) {
   return {
     type: 'LOGIN_USER',
     payload: {
