@@ -20,7 +20,7 @@ const ForgotPassword: React.FC = () => {
     try {
       await api.post('passwords', {
         email: forgotPassword,
-        redirect_url: 'http://localhost:3000/',
+        redirect_url: 'http://localhost:3000/resetpassword',
       });
 
       addToast(

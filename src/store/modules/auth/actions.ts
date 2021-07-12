@@ -14,3 +14,10 @@ export function logIn(response: ResponseProps) {
     },
   };
 }
+
+export function logOut() {
+  return {
+    type: 'LOGOUT_USER',
+    payload: {},
+  };
+}

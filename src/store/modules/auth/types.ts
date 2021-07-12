@@ -10,7 +10,7 @@ export interface IToken {
   token: string;
 }
 export interface AuthState {
-  token: string;
+  token: IToken;
   user: IUser;
   loggedIn: boolean;
 }

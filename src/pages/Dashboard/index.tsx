@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { CompletedCard } from '../../components/CompletedCard';
 import { GameTypeButton } from '../../components/GameTypeButton';
 import * as S from './styles';
@@ -11,14 +12,17 @@ import api from '../../services/api';
 import { formatDate } from '../../utils/formatDate';
 import { IState } from '../../store';
 import { IUser } from '../../store/modules/auth/types';
+import { logOut } from '../../store/modules/auth/actions';
 
 
-const SignIn: React.FC = () => {
+const Dashboard: React.FC = () => {
   const [games, setGames] = useState<GameProps[]>([]);
   const [selectedFilter, setSelectedFilter] = useState('');
   const [completedCart, setCompletedCart] = useState<CompletedGameProps[]>([]);
   const [filteredCart, setFilteredCart] = useState<CompletedGameProps[]>([]);
   const user = useSelector<IState, IUser>(state => state.auth.user);
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleFilter = (type: string) => {
     let filtered = [...filteredCart];
@@ -26,6 +30,10 @@ const SignIn: React.FC = () => {
     filtered = completedCart.filter(item => item.gameType === type);
     setFilteredCart(filtered);
   };
+  const handleLogOut = async () => {
+    dispatch(logOut());
+    history.push('/')
+  }
   useEffect(() => {
     async function loadGames() {
       const response = await api.get('games');
@@ -54,11 +62,11 @@ const SignIn: React.FC = () => {
       <S.Header>
         <h1>TGL</h1>
         <nav>
-          <S.AccountButton to="/">
+          <S.AccountButton to="/account">
             Account
           </S.AccountButton>
-          <S.LogOutButton to="/">
-            Sair
+          <S.LogOutButton onClick={handleLogOut}>
+            Logout
             <FiArrowRight />
           </S.LogOutButton>
         </nav>
@@ -115,4 +123,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default Dashboard;

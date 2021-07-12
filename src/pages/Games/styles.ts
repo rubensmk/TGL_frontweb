@@ -44,18 +44,6 @@ export const Header = styled.header`
       font-size: 21px;
       font-style: italic;
     }
-
-    .logout {
-      text-decoration: none;
-      color: var(--gray);
-      margin-right: 48px;
-      font-size: 21px;
-      font-style: italic;
-
-      svg {
-        margin-left: 20px;
-      }
-    }
   }
 
   @media (max-width: 678px) {
@@ -382,5 +370,18 @@ export const CartList = styled.div`
 
   @media (max-width: 375px) {
     align-items: center;
+  }
+`;
+export const LogOutButton = styled.button`
+  text-decoration: none;
+  border: 0;
+  background: transparent;
+  color: var(--gray);
+  margin-right: 48px;
+  font-size: 21px;
+  font-style: italic;
+
+  svg {
+    margin-left: 20px;
   }
 `;

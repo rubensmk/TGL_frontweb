@@ -1,11 +1,14 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 import { Reducer } from 'redux';
-import produce from 'immer';
+import producer from 'immer';
 import { AuthState } from './types';
 import api from '../../../services/api';
 
 const INITIAL_STATE: AuthState = {
-  token: '',
+  token: {
+    token: '',
+  },
   user: {
     id: '',
     username: '',
@@ -17,24 +20,43 @@ const INITIAL_STATE: AuthState = {
 };
 
 const auth: Reducer<AuthState> = (state = INITIAL_STATE, action) => {
-  switch (action.type) {
-    case 'LOGIN_USER': {
-      const { response } = action.payload;
-
-      return produce(state, draft => {
+  return producer(state, draft => {
+    switch (action.type) {
+      case 'LOGIN_USER': {
+        const { response } = action.payload;
         api.defaults.headers.authorization = `Bearer ${response.token.token}`;
+
+        localStorage.setItem('@TGL:token', JSON.stringify(response.token));
+        localStorage.setItem('@TGL:user', JSON.stringify(response.user));
+
         draft.token = response.token;
         draft.user = response.user;
 
         if (draft.token) {
           draft.loggedIn = true;
         }
-      });
+        break;
+      }
+      case 'LOGOUT_USER': {
+        localStorage.removeItem('@TGL:token');
+        localStorage.removeItem('@TGL:user');
+
+        draft.token = { token: '' };
+        draft.user = {
+          id: '',
+          username: '',
+          email: '',
+          created_at: '',
+          updated_at: '',
+        };
+        draft.loggedIn = false;
+        break;
+      }
+      default: {
+        return draft;
+      }
     }
-    default: {
-      return state;
-    }
-  }
+  });
 };
 
 export default auth;

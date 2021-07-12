@@ -73,8 +73,10 @@ export const AccountButton = styled(Link)`
       }
 `;
 
-export const LogOutButton = styled(Link)`
+export const LogOutButton = styled.button`
       display: flex;
+      border: 0;
+      background: transparent;
       align-items: center;
       text-decoration: none;
       color: var(--gray);
@@ -218,7 +220,6 @@ export const RecentGames = styled.div`
     width: 400px;
   }
 `;
-
 
 
 

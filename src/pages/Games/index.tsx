@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
 import { useHistory, Link } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { CartGameCard } from '../../components/CartGameCard';
 import { BetNumber } from '../../components/BetNumber';
 import { GameTypeButton } from '../../components/GameTypeButton';
@@ -14,6 +14,8 @@ import { GameProps, IFetchGame, NumberProps } from './types';
 import api from '../../services/api';
 import { IState } from '../../store';
 import { IUser } from '../../store/modules/auth/types';
+import { logOut } from '../../store/modules/auth/actions';
+
 
 const Games: React.FC<NumberProps> = () => {
   const user = useSelector<IState, IUser>(state => state.auth.user);
@@ -32,6 +34,7 @@ const Games: React.FC<NumberProps> = () => {
   const [cartList, setCartList] = useState<ICartItem[]>([]);
   const [total, setTotal] = useState(0);
   const history = useHistory();
+  const dispatch = useDispatch();
   const { addToast } = useToasts();
 
 
@@ -168,6 +171,10 @@ const Games: React.FC<NumberProps> = () => {
     }
   };
 
+  const handleLogOut = async () => {
+    dispatch(logOut());
+    history.push('/')
+  }
   useEffect(() => {
     async function loadGames() {
       const response = await api.get('games');
@@ -195,12 +202,12 @@ const Games: React.FC<NumberProps> = () => {
           <Link to="/dashboard" className="home">
             Home
           </Link>
-          <Link to="/" className="account">
+          <Link to="/account" className="account">
             Account
           </Link>
-          <Link to="/" className="logout">
+          <S.LogOutButton onClick={handleLogOut} className="logout">
             Logout
-          </Link>
+          </S.LogOutButton>
         </nav>
       </S.Header>
 
