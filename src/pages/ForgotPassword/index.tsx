@@ -1,12 +1,14 @@
 /* eslint-disable array-callback-return */
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { Link, useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
+
 import * as Yup from 'yup';
-import * as S from './styles';
+
 import api from '../../services/api';
 import getValidationErrors from '../../utils/getValidationErrors';
+import * as S from './styles';
 
 const ForgotPassword: React.FC = () => {
   const [forgotPassword, setForgotPassword] = useState('');
@@ -17,41 +19,44 @@ const ForgotPassword: React.FC = () => {
   const handleResetPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForgotPassword(event.target.value);
   };
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
 
-    const data = {
-      email: forgotPassword,
-    };
-    try {
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('E-mail obrigatório')
-          .email('Digite um e-mail válido'),
-      });
-      await schema.validate(data, { abortEarly: false });
-      await api.post('passwords', {
+      const data = {
         email: forgotPassword,
-        redirect_url: 'http://localhost:3000/resetpassword',
-      });
+      };
+      try {
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um e-mail válido'),
+        });
+        await schema.validate(data, { abortEarly: false });
+        await api.post('passwords', {
+          email: forgotPassword,
+          redirect_url: 'http://localhost:3000/resetpassword',
+        });
 
-      addToast(
-        'E-mail válido, foi enviado para o seu email o link de reset da senha!',
-        {
-          appearance: 'success',
+        addToast(
+          'E-mail válido, foi enviado para o seu email o link de reset da senha!',
+          {
+            appearance: 'success',
+            autoDismiss: true,
+          },
+        );
+        history.push('/');
+      } catch (err) {
+        const errors = getValidationErrors(err);
+        setError({ email: errors.email });
+        addToast('E-mail inválido, tente novamente!', {
+          appearance: 'error',
           autoDismiss: true,
-        },
-      );
-      history.push('/');
-    } catch (err) {
-      const errors = getValidationErrors(err);
-      setError({ email: errors.email });
-      addToast('E-mail inválido, tente novamente!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    }
-  };
+        });
+      }
+    },
+    [addToast, forgotPassword, history],
+  );
 
   return (
     <S.Container>

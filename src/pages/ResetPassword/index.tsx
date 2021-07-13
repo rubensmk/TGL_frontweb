@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
+
 import api from '../../services/api';
 import * as S from './styles';
+import { ParamsToken } from './types';
 
-interface ParamsToken {
-  token: string;
-}
 const ResetPassword: React.FC = () => {
   const [enteredPassword, setEnteredPassword] = useState('');
   const [enteredConfirmation, setEnteredConfirmation] = useState('');
@@ -22,26 +21,29 @@ const ResetPassword: React.FC = () => {
     setEnteredConfirmation(event.target.value);
   };
 
-  const handleChangePassword = async (event: React.FormEvent) => {
-    event.preventDefault();
-    try {
-      await api.put('passwords', {
-        token: params.token,
-        password: enteredPassword,
-        password_confirmation: enteredConfirmation,
-      });
-      addToast('Alterações realizadas com sucesso.', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
-      history.push('/');
-    } catch (error) {
-      addToast('Erro, tente novamente!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    }
-  };
+  const handleChangePassword = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      try {
+        await api.put('passwords', {
+          token: params.token,
+          password: enteredPassword,
+          password_confirmation: enteredConfirmation,
+        });
+        addToast('Alterações realizadas com sucesso.', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+        history.push('/');
+      } catch (error) {
+        addToast('Erro, tente novamente!', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+    },
+    [addToast, history, enteredPassword, enteredConfirmation, params.token],
+  );
 
   return (
     <S.Container>

@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { FiTrash2 } from 'react-icons/fi';
+
 import { formatValue } from '../../utils/formatValue';
 import * as S from './styles';
 import { CartGameProps } from './types';

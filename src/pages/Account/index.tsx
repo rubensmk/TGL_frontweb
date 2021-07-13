@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
+
 import api from '../../services/api';
 import { IState } from '../../store';
 import { IUser } from '../../store/modules/auth/types';
@@ -16,23 +17,25 @@ const Account: React.FC = () => {
   const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredName(event.target.value);
   };
-
-  const handleUpdate = async (event: React.FormEvent) => {
-    event.preventDefault();
-    try {
-      await api.put(`users/${user.id}`, { username: enteredName });
-      addToast('Alterações realizadas com sucesso.', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
-    } catch (error) {
-      addToast('Erro, tente novamente!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    }
-  };
-  const sendResetPasswordMail = async () => {
+  const handleUpdate = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      try {
+        await api.put(`users/${user.id}`, { username: enteredName });
+        addToast('Alterações realizadas com sucesso.', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      } catch (error) {
+        addToast('Erro, tente novamente!', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+    },
+    [addToast, enteredName, user.id],
+  );
+  const sendResetPasswordMail = useCallback(async () => {
     try {
       await api.post('passwords', {
         email: user.email,
@@ -48,7 +51,7 @@ const Account: React.FC = () => {
         autoDismiss: true,
       });
     }
-  };
+  }, [addToast, user.email]);
 
   return (
     <S.Container>

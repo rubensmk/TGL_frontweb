@@ -1,9 +1,10 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
-import { Reducer } from 'redux';
 import producer from 'immer';
-import { AuthState } from './types';
+import { Reducer } from 'redux';
+
 import api from '../../../services/api';
+import { AuthState } from './types';
 
 const INITIAL_STATE: AuthState = {
   token: {
@@ -41,15 +42,16 @@ const auth: Reducer<AuthState> = (state = INITIAL_STATE, action) => {
         localStorage.removeItem('@TGL:token');
         localStorage.removeItem('@TGL:user');
 
-        draft.token = { token: '' };
-        draft.user = {
-          id: '',
-          username: '',
-          email: '',
-          created_at: '',
-          updated_at: '',
-        };
-        draft.loggedIn = false;
+        // draft.token = { token: '' };
+        // draft.user = {
+        //   id: '',
+        //   username: '',
+        //   email: '',
+        //   created_at: '',
+        //   updated_at: '',
+        // };
+        // draft.loggedIn = false;
+        draft = state;
         break;
       }
       default: {

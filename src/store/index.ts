@@ -1,4 +1,5 @@
 import { createStore } from 'redux';
+
 import { AuthState } from './modules/auth/types';
 import { ICartState } from './modules/cart/types';
 import rootReducer from './modules/rootReducer';

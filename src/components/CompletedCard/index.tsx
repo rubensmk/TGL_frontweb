@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
+
 import * as S from './styles';
 import { CompletedCardProps } from './types';
 

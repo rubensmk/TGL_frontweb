@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import styled, { css } from 'styled-components';
 
-interface ContainerProps {
-  isActive?: boolean;
-}
+import { ContainerProps } from './types';
+
+
 
 export const Container = styled.button<ContainerProps>`
 

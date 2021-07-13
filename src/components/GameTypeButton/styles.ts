@@ -1,9 +1,6 @@
 import styled, { css } from 'styled-components';
 
-interface ContainerProps {
-  color: string;
-  isActive?: boolean;
-}
+import { ContainerProps } from './types';
 
 export const Container = styled.button<ContainerProps>`
   width: 113px;

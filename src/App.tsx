@@ -1,10 +1,11 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
+
 import Routes from './routes';
-import GlobalStyle from './styles/global';
 import store from './store';
+import GlobalStyle from './styles/global';
 
 const App: React.FC = () => {
   return (

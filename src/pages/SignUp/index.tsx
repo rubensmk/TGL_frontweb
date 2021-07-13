@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { Link, useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
+
 import * as Yup from 'yup';
-import * as S from './styles';
+
 import api from '../../services/api';
 import getValidationErrors from '../../utils/getValidationErrors';
+import * as S from './styles';
 
 const SignUp: React.FC = () => {
   const [registerName, setRegisterName] = useState('');
@@ -26,49 +28,52 @@ const SignUp: React.FC = () => {
   ) => {
     setRegisterPassword(event.target.value);
   };
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
 
-    const data = {
-      username: registerName,
-      email: registerEmail,
-      password: registerPassword,
-      password_confirmation: registerPassword,
-    };
+      const data = {
+        username: registerName,
+        email: registerEmail,
+        password: registerPassword,
+        password_confirmation: registerPassword,
+      };
 
-    try {
-      const schema = Yup.object().shape({
-        username: Yup.string().required('Nome do usuário é obrigatório'),
-        email: Yup.string()
-          .required('E-mail obrigatório')
-          .email('Digite um e-mail válido'),
-        password: Yup.string()
-          .required('Senha obrigatória')
-          .min(6, 'No mínimo 6 caractéres'),
-      });
-      await schema.validate(data, { abortEarly: false });
+      try {
+        const schema = Yup.object().shape({
+          username: Yup.string().required('Nome do usuário é obrigatório'),
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um e-mail válido'),
+          password: Yup.string()
+            .required('Senha obrigatória')
+            .min(6, 'No mínimo 6 caractéres'),
+        });
+        await schema.validate(data, { abortEarly: false });
 
-      await api.post('users', data);
+        await api.post('users', data);
 
-      addToast('Cadastro realizado com sucesso!', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
+        addToast('Cadastro realizado com sucesso!', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
 
-      history.push('/');
-    } catch (err) {
-      const errors = getValidationErrors(err);
-      setError({
-        username: errors.username,
-        email: errors.email,
-        password: errors.password,
-      });
-      addToast('Erro no cadastro, tente novamente.', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    }
-  };
+        history.push('/');
+      } catch (err) {
+        const errors = getValidationErrors(err);
+        setError({
+          username: errors.username,
+          email: errors.email,
+          password: errors.password,
+        });
+        addToast('Erro no cadastro, tente novamente.', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+    },
+    [addToast, history, registerEmail, registerPassword, registerName],
+  );
 
   return (
     <S.Container>

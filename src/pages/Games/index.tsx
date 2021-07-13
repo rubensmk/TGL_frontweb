@@ -1,20 +1,21 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications'
-import { useSelector, useDispatch } from 'react-redux';
-import { CartGameCard } from '../../components/CartGameCard';
+
 import { BetNumber } from '../../components/BetNumber';
+import { CartGameCard } from '../../components/CartGameCard';
 import { GameTypeButton } from '../../components/GameTypeButton';
-import * as S from './styles';
-import { ICartItem } from '../../store/modules/cart/types';
-import { formatValue } from '../../utils/formatValue';
-import { GameProps, IFetchGame, NumberProps } from './types';
 import api from '../../services/api';
 import { IState } from '../../store';
-import { IUser } from '../../store/modules/auth/types';
 import { logOut } from '../../store/modules/auth/actions';
+import { IUser } from '../../store/modules/auth/types';
+import { ICartItem } from '../../store/modules/cart/types';
+import { formatValue } from '../../utils/formatValue';
+import * as S from './styles';
+import { GameProps, IFetchGame, NumberProps } from './types';
 
 
 const Games: React.FC<NumberProps> = () => {
@@ -38,7 +39,7 @@ const Games: React.FC<NumberProps> = () => {
   const { addToast } = useToasts();
 
 
-  const handleSelectGame = (game: GameProps) => {
+  const handleSelectGame = useCallback((game: GameProps) => {
     setChoosedNumbers([]);
     setSelectedGame(game.type);
     setGameId(game.gameId);
@@ -50,9 +51,9 @@ const Games: React.FC<NumberProps> = () => {
     setDescription(game.description);
     setRange(game.range);
     setBetNumbers(Array.from(Array(game.range).keys()));
-  };
+  }, []);
 
-  const handleSelectNumber = (selectedNum: number) => {
+  const handleSelectNumber = useCallback((selectedNum: number) => {
     const newEntry = selectedNum + 1;
     const numbers = [...choosedNumbers];
 
@@ -65,16 +66,39 @@ const Games: React.FC<NumberProps> = () => {
       numbers.push(newEntry);
       setChoosedNumbers(numbers);
     }
-  };
+  }, [addToast, choosedNumbers, limit]);
 
-  const handleClearGame = () => {
+  const handleClearGame = useCallback(() => {
     setChoosedNumbers([]);
-  };
+  }, []);
 
-  const handleCompleteGame = () => {
-    const numbers = [...choosedNumbers];
+  const handleCompleteGame = useCallback(() => {
+    let numbers = [...choosedNumbers];
     const min = 1;
 
+    if (numbers.length === limit) {
+      numbers = []
+      setChoosedNumbers(numbers);
+      for (let i = 0; i < limit; i++) {
+        let randomNum = Math.floor(Math.random() * range) + min;
+        let check = numbers.includes(randomNum);
+
+        if (check === false) {
+          numbers.push(randomNum);
+          setChoosedNumbers(numbers);
+        } else {
+          while (check === true) {
+            randomNum = Math.floor(Math.random() * range) + min;
+            check = numbers.includes(randomNum);
+            if (check === false) {
+              numbers.push(randomNum);
+              setChoosedNumbers(numbers);
+            }
+          }
+        }
+
+      }
+    }
     if (numbers.length === 0) {
       for (let i = 0; i < limit; i++) {
         let randomNum = Math.floor(Math.random() * range) + min;
@@ -116,9 +140,10 @@ const Games: React.FC<NumberProps> = () => {
         }
       }
     }
-  };
 
-  const handleAddToCart = () => {
+  }, [choosedNumbers, limit, range]);
+
+  const handleAddToCart = useCallback(() => {
     const numbers = [...choosedNumbers];
     let newTotal = total;
     const newCartItem = {
@@ -136,9 +161,9 @@ const Games: React.FC<NumberProps> = () => {
     } else {
       addToast(`É preciso escolher o número limite de ${limit} números para finalizar uma jogada.`, { appearance: 'warning', autoDismiss: true })
     }
-  };
+  }, [addToast, cartList, choosedNumbers, total, color, gameId, limit, selectedGame, price]);
 
-  const handleRemoveFromCart = async (id: number) => {
+  const handleRemoveFromCart = useCallback(async (id: number) => {
     let totalPrice = 0;
     const cartItems = [...cartList];
     const cartItemsFiltered = cartItems.filter((item) => item.id !== id);
@@ -146,9 +171,9 @@ const Games: React.FC<NumberProps> = () => {
     cartItemsFiltered.map((item) => totalPrice += item.gamePrice);
     setTotal(totalPrice);
     setCartList(cartItemsFiltered);
-  }
+  }, [cartList])
 
-  const handleSave = async (allCartItems: ICartItem[]) => {
+  const handleSave = useCallback(async (allCartItems: ICartItem[]) => {
     if (total >= minCartValue) {
       try {
         allCartItems.map(item => {
@@ -169,12 +194,13 @@ const Games: React.FC<NumberProps> = () => {
     } else {
       addToast(`Você precisa completar o valor mínimo de ${formatValue(minCartValue)} para salvar.`, { appearance: 'warning', autoDismiss: true })
     }
-  };
+  }, [addToast, history, user.id, minCartValue, total]);
 
-  const handleLogOut = async () => {
+  const handleLogOut = useCallback(async () => {
     dispatch(logOut());
     history.push('/')
-  }
+  }, [dispatch, history])
+
   useEffect(() => {
     async function loadGames() {
       const response = await api.get('games');

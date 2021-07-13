@@ -1,12 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { ButtonHTMLAttributes } from 'react';
-import * as S from './styles';
+import React from 'react';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  value: number;
-  isActive?: boolean;
-}
+import * as S from './styles';
+import { ButtonProps } from './types';
 
 export const BetNumber: React.FC<ButtonProps> = ({
   value,

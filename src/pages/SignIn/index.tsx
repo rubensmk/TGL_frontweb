@@ -1,14 +1,16 @@
 /* eslint-disable array-callback-return */
-import React, { useCallback, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
+
 import * as Yup from 'yup';
-import * as S from './styles';
-import { logIn } from '../../store/modules/auth/actions';
+
 import api from '../../services/api';
+import { logIn } from '../../store/modules/auth/actions';
 import getValidationErrors from '../../utils/getValidationErrors';
+import * as S from './styles';
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch();
@@ -64,6 +66,19 @@ const SignIn: React.FC = () => {
     },
     [addToast, history, dispatch, enteredEmail, enteredPassword],
   );
+
+  useEffect(() => {
+    async function checkLoginIn() {
+      const token = localStorage.getItem('@TGL:token');
+      const user = localStorage.getItem('@TGL:user');
+
+      if (token && user) {
+        dispatch(logIn({ token: JSON.parse(token), user: JSON.parse(user) }));
+        history.push('/dashboard');
+      }
+    }
+    checkLoginIn();
+  }, [dispatch, history]);
 
   return (
     <S.Container>

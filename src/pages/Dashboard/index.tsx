@@ -1,18 +1,20 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
+
 import { CompletedCard } from '../../components/CompletedCard';
 import { GameTypeButton } from '../../components/GameTypeButton';
-import * as S from './styles';
+import api from '../../services/api';
+import { IState } from '../../store';
+import { logOut } from '../../store/modules/auth/actions';
+import { IUser } from '../../store/modules/auth/types';
+import { formatDate } from '../../utils/formatDate';
 import { formatValue } from '../../utils/formatValue';
 import { CompletedGameProps, GameProps, IFetchGame } from '../Games/types';
-import api from '../../services/api';
-import { formatDate } from '../../utils/formatDate';
-import { IState } from '../../store';
-import { IUser } from '../../store/modules/auth/types';
-import { logOut } from '../../store/modules/auth/actions';
+import * as S from './styles';
 
 
 const Dashboard: React.FC = () => {
@@ -21,6 +23,7 @@ const Dashboard: React.FC = () => {
   const [completedCart, setCompletedCart] = useState<CompletedGameProps[]>([]);
   const [filteredCart, setFilteredCart] = useState<CompletedGameProps[]>([]);
   const user = useSelector<IState, IUser>(state => state.auth.user);
+  const { addToast } = useToasts();
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -30,23 +33,32 @@ const Dashboard: React.FC = () => {
     filtered = completedCart.filter(item => item.gameType === type);
     setFilteredCart(filtered);
   };
-  const handleLogOut = async () => {
+  const handleLogOut = useCallback(async () => {
     dispatch(logOut());
     history.push('/')
-  }
+  }, [dispatch, history])
+
   useEffect(() => {
     async function loadGames() {
-      const response = await api.get('games');
-      const data = response.data.data.map((item: IFetchGame) => ({
-        type: item.type,
-        description: item.description,
-        range: item.range,
-        price: item.price,
-        maxNumber: item['max-number'],
-        color: item.color,
-        minCartValue: item['min-cart-value'],
-      }));
-      setGames(data);
+      try {
+        const response = await api.get('games');
+        const data = response.data.data.map((item: IFetchGame) => ({
+          type: item.type,
+          description: item.description,
+          range: item.range,
+          price: item.price,
+          maxNumber: item['max-number'],
+          color: item.color,
+          minCartValue: item['min-cart-value'],
+        }));
+        setGames(data);
+      } catch (err) {
+        addToast('Erro ao carregar jogos recentes.', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+
     }
     async function loadCompletedGames() {
       const response = await api.get(`users/${user.id}`)
@@ -55,7 +67,7 @@ const Dashboard: React.FC = () => {
     }
     loadGames();
     loadCompletedGames();
-  }, [user.id]);
+  }, [user.id, addToast]);
 
   return (
     <S.Container>
