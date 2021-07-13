@@ -1,17 +1,20 @@
 /* eslint-disable array-callback-return */
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
+import * as Yup from 'yup';
 import * as S from './styles';
 import { logIn } from '../../store/modules/auth/actions';
 import api from '../../services/api';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch();
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
+  const [error, setError] = useState({ email: '', password: '' });
   const history = useHistory();
   const { addToast } = useToasts();
 
@@ -21,31 +24,46 @@ const SignIn: React.FC = () => {
   const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredPassword(event.target.value);
   };
-  const handleLogin = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleLogin = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
 
-    try {
-      const response = await api.post('sessions', {
+      const data = {
         email: enteredEmail,
         password: enteredPassword,
-      });
+      };
 
-      const { token, user } = response.data;
+      try {
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um e-mail válido'),
+          password: Yup.string().required('Senha obrigatória'),
+        });
+        await schema.validate(data, { abortEarly: false });
 
-      addToast('Sessão iniciada com sucesso, Seja Bem-Vindo!', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
+        const response = await api.post('sessions', data);
 
-      dispatch(logIn({ token, user }));
-      history.push('/dashboard');
-    } catch (error) {
-      addToast('E-mail ou senha incorreta!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    }
-  };
+        const { token, user } = response.data;
+
+        addToast('Sessão iniciada com sucesso, Seja Bem-Vindo!', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+
+        dispatch(logIn({ token, user }));
+        history.push('/dashboard');
+      } catch (err) {
+        const errors = getValidationErrors(err);
+        setError({ email: errors.email, password: errors.password });
+        addToast('Erro ao efetuar login, verifique seu email ou senha.', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+    },
+    [addToast, history, dispatch, enteredEmail, enteredPassword],
+  );
 
   return (
     <S.Container>
@@ -63,18 +81,14 @@ const SignIn: React.FC = () => {
       <S.Auth>
         <h2>Authentication</h2>
         <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Email"
-            required
-            onChange={handleEmail}
-          />
+          <input type="email" placeholder="Email" onChange={handleEmail} />
+          <S.ErrorMessage>{error.email}</S.ErrorMessage>
           <input
             type="password"
             placeholder="Password"
-            required
             onChange={handlePassword}
           />
+          <S.ErrorMessage>{error.password}</S.ErrorMessage>
           <Link className="forgot button" to="/password">
             I forget my password
           </Link>

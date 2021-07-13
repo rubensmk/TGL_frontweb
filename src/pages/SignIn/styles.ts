@@ -171,3 +171,10 @@ export const Auth = styled.div`
   }
 
 `;
+export const ErrorMessage = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  color:red;
+  opacity:0.7;
+`;

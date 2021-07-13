@@ -87,7 +87,7 @@ export const Auth = styled.div`
     border-radius:14px 14px 0 0;
     border-bottom: 2px solid #EBEBEB;
     width: 350px;
-    height:72px;
+    height:68px;
 
     &::placeholder{
     color: var(--light-gray)
@@ -98,7 +98,7 @@ export const Auth = styled.div`
     text-decoration: none;
     display: flex;
     align-items: center;
-    margin-top: 44px;
+    margin-top: 24px;
     width: 190px;
     height: 42px;
     border: 0;
@@ -166,4 +166,11 @@ export const Auth = styled.div`
     }
   }
 
+`;
+export const ErrorMessage = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  color:red;
+  opacity:0.7;
 `;
