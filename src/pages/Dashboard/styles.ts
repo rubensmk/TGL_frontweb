@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Link } from 'react-router-dom';
 
+import Pagination from '@material-ui/lab/Pagination';
 import styled from 'styled-components';
 
 export const Container = styled.main`
@@ -222,6 +223,10 @@ export const RecentGames = styled.div`
   }
 `;
 
-
-
+export const PaginationComp = styled(Pagination)`
+  margin-top: 12px;
+  button{
+    color: var(--gray)
+  }
+`;
 

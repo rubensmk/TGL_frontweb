@@ -12,7 +12,7 @@ export const Container = styled.div<ContainerProps>`
 
   width: 60%;
   height: 120px;
-  margin-top: 38px;
+  margin-top: 20px;
   padding-left: 15px;
   padding-right: 15px;
 

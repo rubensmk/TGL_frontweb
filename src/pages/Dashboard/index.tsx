@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+
 import React, { useCallback, useEffect, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,31 +19,36 @@ import * as S from './styles';
 
 
 const Dashboard: React.FC = () => {
+  const [page, setPage] = useState(1);
+  const [allPages, setAllPages] = useState(0);
   const [games, setGames] = useState<GameProps[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState(0);
   const [completedCart, setCompletedCart] = useState<CompletedGameProps[]>([]);
-  const [filteredCart, setFilteredCart] = useState<CompletedGameProps[]>([]);
   const user = useSelector<IState, IUser>(state => state.auth.user);
   const { addToast } = useToasts();
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const handleFilter = (type: string) => {
-    let filtered = [...filteredCart];
-    setSelectedFilter(prevState => (prevState === type ? '' : type));
-    filtered = completedCart.filter(item => item.gameType === type);
-    setFilteredCart(filtered);
-  };
   const handleLogOut = useCallback(async () => {
     dispatch(logOut());
     history.push('/')
   }, [dispatch, history])
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleChangePage = (event: any, value: number) => {
+    setPage(value);
+  };
+
+  const handleFilter = async (type: number) => {
+    setSelectedFilter(prevState => (prevState === type ? 0 : type));
+  };
 
   useEffect(() => {
     async function loadGames() {
       try {
         const response = await api.get('games');
         const data = response.data.data.map((item: IFetchGame) => ({
+          gameId: item.id,
           type: item.type,
           description: item.description,
           range: item.range,
@@ -61,13 +67,25 @@ const Dashboard: React.FC = () => {
 
     }
     async function loadCompletedGames() {
-      const response = await api.get(`users/${user.id}`)
-      const { bets } = response.data
-      bets.map((item: CompletedGameProps) => setCompletedCart(prevState => [...prevState, item]))
+      setCompletedCart([]);
+
+      if (selectedFilter === 0) {
+        const response = await api.get(`/bets/${user.id}/${page}`)
+        const allBetsByUser = response.data;
+        setAllPages(allBetsByUser.lastPage);
+        allBetsByUser.data.map((item: CompletedGameProps) => setCompletedCart(prevState => [...prevState, item]))
+      } else {
+        const response = await api.get(`/bets?page=${page}&user=${user.id}&game=${selectedFilter}`)
+        const filteredBetsByGameId = response.data
+        setAllPages(filteredBetsByGameId.lastPage);
+        filteredBetsByGameId.data.map((item: CompletedGameProps) => setCompletedCart(prevState => [...prevState, item]))
+      }
     }
+
     loadGames();
     loadCompletedGames();
-  }, [user.id, addToast]);
+
+  }, [user.id, addToast, page, selectedFilter]);
 
   return (
     <S.Container>
@@ -91,8 +109,8 @@ const Dashboard: React.FC = () => {
             <div>
               {games.map(game => (
                 <GameTypeButton
-                  onClick={() => handleFilter(game.type)}
-                  active={game.type === selectedFilter}
+                  onClick={() => handleFilter(game.gameId)}
+                  active={game.gameId === selectedFilter}
                   color={game.color}
                   key={game.type}
                 >
@@ -107,28 +125,18 @@ const Dashboard: React.FC = () => {
           </S.NewBetButton>
         </S.Options>
         <S.RecentGames>
-          {completedCart.length === 0 && filteredCart.length === 0 && <span>No recent games available.</span>}
-          {selectedFilter === ''
-            ? completedCart.map(item => (
-              <CompletedCard
-                key={item.id}
-                date={formatDate(item.created_at)}
-                listNumbers={item.choosenNumber}
-                color={item.gameColor}
-                type={item.gameType}
-                price={formatValue(item.gamePrice)}
-              />
-            ))
-            : filteredCart.map(item => (
-              <CompletedCard
-                key={item.id}
-                date={formatDate(item.created_at)}
-                listNumbers={item.choosenNumber}
-                color={item.gameColor}
-                type={item.gameType}
-                price={formatValue(item.gamePrice)}
-              />
-            ))}
+          <S.PaginationComp count={allPages} onChange={handleChangePage} />
+          {completedCart.length === 0 && <span>No recent games available.</span>}
+          {completedCart.map(item => (
+            <CompletedCard
+              key={item.id}
+              date={formatDate(item.created_at)}
+              listNumbers={item.choosenNumber}
+              color={item.gameColor}
+              type={item.gameType}
+              price={formatValue(item.gamePrice)}
+            />
+          ))}
         </S.RecentGames>
       </S.Content>
     </S.Container>
